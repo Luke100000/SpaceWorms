@@ -1,5 +1,5 @@
----@enum Block
-Blocks = {}
+---@class Block
+Block = {}
 
 ---@type table { [integer]: Block }
 local colorToBlock = {}
@@ -19,15 +19,15 @@ end
 ---@param r number
 ---@param g number
 ---@param b number
----@return Block
-function Blocks.fromColor(r, g, b)
+---@return Blocks
+function Block.fromColor(r, g, b)
 	return colorToBlock[colorToId(r, g, b)]
 end
 
 ---Gets the color index
----@param block Block
+---@param block Blocks
 ---@return integer
-function Blocks.getIndex(block)
+function Block.getIndex(block)
 	return blockToIndex[block]
 end
 
@@ -37,17 +37,18 @@ local lastID = 0
 ---@param r integer
 ---@param g integer
 ---@param b integer
----@return Block
+---@return Blocks
 local function register(index, r, g, b)
 	lastID = lastID + 1
 	colorToBlock[colorToId(r, g, b)] = lastID
 	blockToIndex[lastID] = index
-
-	---@cast lastID Block
 	return lastID
 end
 
-Blocks.AIR = register(0, 0, 0, 0)
-Blocks.STONE = register(3, 255, 255, 255)
-Blocks.SPAWN_A = register(0, 0, 255, 0)
-Blocks.SPAWN_B = register(0, 255, 0, 0)
+---@enum Blocks
+Blocks = {
+	AIR = register(0, 0, 0, 0),
+	STONE = register(3, 255, 255, 255),
+	SPAWN_A = register(0, 0, 255, 0),
+	SPAWN_B = register(0, 255, 0, 0)
+}

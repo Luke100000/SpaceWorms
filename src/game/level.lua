@@ -27,7 +27,7 @@ function Classes.level:init(level)
 		self.world[x] = {}
 		for y = 1, Classes.level.height do
 			local r, g, b = image:getPixel(x - 1, y - 1)
-			local block = Blocks.fromColor(r, g, b)
+			local block = Block.fromColor(r, g, b)
 			if block == Blocks.SPAWN_A then
 				table.insert(self.spawns.a, { x, y })
 				block = Blocks.AIR
@@ -43,10 +43,10 @@ end
 ---Sets a pixel
 ---@param x integer
 ---@param y integer
----@param block Block
+---@param block Blocks
 function Classes.level:setPixel(x, y, block)
 	self.world[x][y] = block
-	local p = Blocks.getIndex(block) / 3
+	local p = Block.getIndex(block) / 3
 	self.imageData:setPixel(x - 1, y - 1, p, p, p, 1.0)
 	self.dirty = true
 end
@@ -54,7 +54,7 @@ end
 ---Gets a pixel
 ---@param x integer
 ---@param y integer
----@returns Block
+---@returns Blocks
 function Classes.level:getPixel(x, y)
 	return self.world[x][y]
 end
