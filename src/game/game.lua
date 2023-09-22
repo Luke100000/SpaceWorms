@@ -4,6 +4,7 @@ Classes.game = Clazz()
 require("src.game.blocks")
 require("src.game.level")
 require("src.game.inventory")
+require("src.game.weapons")
 
 require("src.game.entities.entity")
 require("src.game.entities.worm")
@@ -85,6 +86,8 @@ function Classes.game:draw()
 		for _, entity in ipairs(self.entities) do
 			entity:draw()
 		end
+		
+		love.graphics.draw(Texture.ingameMenu)
 	end
 end
 

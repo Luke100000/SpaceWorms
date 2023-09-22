@@ -21,8 +21,28 @@ function Classes.inventory:draw()
 		end
 	end
 
+	--weapons
+	local selectedWeapon
+	for name, weapon in pairs(Weapons) do
+		love.graphics.draw(Texture.weapon[name], 6 + (weapon.x - 1) * 26, 6 + (weapon.y - 1) * 26)
+
+		if weapon.x == self.x and weapon.y == self.y then
+			selectedWeapon = weapon
+		end
+	end
+
+	if selectedWeapon then
+		love.graphics.print(selectedWeapon.description:lower(), 3, 127)
+
+		love.graphics.print(tostring(selectedWeapon.berries), 37, 108)
+		love.graphics.print(tostring(selectedWeapon.wood), 37 + 36, 108)
+		love.graphics.print(tostring(selectedWeapon.crystals), 37 + 36 * 2, 108)
+	end
+
+	love.graphics.draw(Texture.selectedSlot, 3 + (self.x - 1) * 26, 3 + (self.y - 1) * 26)
+
 	--resources
-	love.graphics.draw(Texture.materialSlot, 10, 89)
+	love.graphics.draw(Texture.emptyMaterialSlot, 10, 89)
 	love.graphics.draw(Texture.materialSlot, 10 + 36, 89)
 	love.graphics.draw(Texture.materialSlot, 10 + 36 * 2, 89)
 end
