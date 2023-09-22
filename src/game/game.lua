@@ -3,6 +3,7 @@ Classes.game = Clazz()
 
 require("src.game.blocks")
 require("src.game.level")
+require("src.game.inventory")
 
 require("src.game.entities.entity")
 require("src.game.entities.worm")
@@ -34,6 +35,11 @@ function Classes.game:init(level, humanPlayerTwo)
 	self.isPlayerTurn = true
 
 	self:nextTurn()
+
+	self.state = "move"
+
+	self.inventoryOpen = false
+	self.inventory = Classes.inventory()
 end
 
 function Classes.game:getCurrentEntity()
@@ -71,10 +77,14 @@ function Classes.game:nextTurn()
 end
 
 function Classes.game:draw()
-	love.graphics.draw(self.level:getImage())
+	if self.inventoryOpen then
+		self.inventory:draw()
+	else
+		love.graphics.draw(self.level:getImage())
 
-	for _, entity in ipairs(self.entities) do
-		entity:draw()
+		for _, entity in ipairs(self.entities) do
+			entity:draw()
+		end
 	end
 end
 
@@ -95,5 +105,13 @@ function Classes.game:update(dt)
 end
 
 function Classes.game:keypressed(key)
-
+	if self.inventoryOpen then
+		self.inventory:keypressed(key)
+	else
+		if key == "space" and not self.inventoryOpen then
+			self.inventoryOpen = true
+		elseif self.inventoryOpen and (key == "space" or key == "escape" or key == "return") then
+			self.inventoryOpen = false
+		end
+	end
 end

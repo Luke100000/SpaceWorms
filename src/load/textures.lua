@@ -4,7 +4,7 @@ Texture = {}
 --automatically loads image when indexed
 local meta = {
 	__index = function(self, path)
-		return love.graphics.newImage(path)
+		return love.graphics.newImage(rawget(self, path .. "_path"))
 	end
 }
 
@@ -19,7 +19,7 @@ local function recLoad(path, textures, prefix)
 			recLoad(path .. "/" .. s, textures[s], prefix)
 		else
 			local ext = s:sub(#s - 3)
-			if ext == ".png" or ext == ".tga" then
+			if ext == ".png" then
 				local name = prefix .. s:sub(1, #s - 4) .. "_path"
 				local p = path .. "/" .. s
 
