@@ -43,26 +43,54 @@ end
 ---Sets a pixel
 ---@param x integer
 ---@param y integer
----@param block Blocks
+---@param block Block
 function Classes.level:setPixel(x, y, block)
-	self.world[x][y] = block
-	local p = Block.getIndex(block) / 3
-	self.imageData:setPixel(x - 1, y - 1, p, p, p, 1.0)
-	self.dirty = true
+	if self:isValid(x, y) then
+		self.world[x][y] = block
+		local p = block.texture / 3
+		self.imageData:setPixel(x - 1, y - 1, p, p, p, 1.0)
+		self.dirty = true
+	end
 end
 
 ---Gets a pixel
 ---@param x integer
 ---@param y integer
----@returns Blocks
-function Classes.level:getPixel(x, y)
-	return self.world[x][y]
+---@returns Block
+function Classes.level:getBlock(x, y)
+	return self:isValid(x, y) and self.world[x][y] or Blocks.AIR
 end
 
+---Checks if a pixel is within map
+---@param x integer
+---@param y integer
+function Classes.level:isValid(x, y)
+	return x > 0 and y > 0 and x <= self.width and y <= self.height
+end
+
+---Updates and returns the map texture
+---@return love.Image
 function Classes.level:getImage()
 	if self.dirty then
 		self.dirty = false
 		self.image:replacePixels(self.imageData, 0, 1, 0, 0, false)
 	end
 	return self.image
+end
+
+---Check for collision
+---@param x integer
+---@param y integer
+---@param w integer
+---@param h integer
+---@return boolean
+function Classes.level:checkCollision(x, y, w, h)
+	for px = x, x + w - 1 do
+		for py = y, y + h - 1 do
+			if self:getBlock(px, py).collision >= 2 then
+				return true
+			end
+		end
+	end
+	return false
 end
