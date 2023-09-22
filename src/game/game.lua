@@ -38,12 +38,22 @@ function Classes.game:init(level, humanPlayerTwo)
 	self:nextTurn()
 
 	self.state = "move"
+	self.power = 1
+	self.maxDistance = 20
 
 	self.inventoryOpen = false
-	self.inventory = Classes.inventory()
+
+	---@type Inventory
+	self.inventory = Classes.inventory(self)
+
+	---@type Weapon
+	self.weapon = nil
 end
 
+---Returns the current entity
+---@return WormEntity
 function Classes.game:getCurrentEntity()
+	---@diagnostic disable-next-line: return-type-mismatch
 	return self.isPlayerTurn and self.currentPlayer or self.currentEnemy
 end
 
@@ -56,6 +66,14 @@ end
 function Classes.game:nextTurn()
 	self.isPlayerTurn = not self.isPlayerTurn
 
+	self:nextEntity()
+
+	local e = self:getCurrentEntity()
+	self.startX = e.x
+	self.startY = e.y
+end
+
+function Classes.game:nextEntity()
 	local search = false
 	for i = 1, 2 do
 		for _, entity in ipairs(self.entities) do
@@ -86,18 +104,39 @@ function Classes.game:draw()
 		for _, entity in ipairs(self.entities) do
 			entity:draw()
 		end
-		
+
 		love.graphics.draw(Texture.ingameMenu)
+
+		love.graphics.rectangle("fill", 110, 130, (1 - self.power) * 20, 8)
+
+		if self.state == "weapon" then
+			self.weapon:draw()
+		end
 	end
 end
 
 function Classes.game:update(dt)
-	self:getCurrentEntity():control(
-		love.keyboard.isDown("left", "a"),
-		love.keyboard.isDown("right", "d"),
-		love.keyboard.isDown("up", "w"),
-		love.keyboard.isDown("down", "s")
-	)
+	if self.state == "move" then
+		local e = self:getCurrentEntity()
+		e:control(
+			love.keyboard.isDown("left", "a"),
+			love.keyboard.isDown("right", "d"),
+			love.keyboard.isDown("up", "w"),
+			love.keyboard.isDown("down", "s")
+		)
+
+		local distance = math.sqrt((self.startX - e.x) ^ 2 + (self.startY - e.y) ^ 2)
+		self.power = distance / self.maxDistance
+
+		if self.power > 1 then
+			self.power = 1
+			self.state = "idle"
+		end
+	end
+
+	if self.state == "weapon" then
+		self.weapon:update(dt)
+	end
 
 	for i = #self.entities, 1, -1 do
 		local remove = self.entities[i]:update(dt)
@@ -113,8 +152,11 @@ function Classes.game:keypressed(key)
 	else
 		if key == "space" and not self.inventoryOpen then
 			self.inventoryOpen = true
-		elseif self.inventoryOpen and (key == "space" or key == "escape" or key == "return") then
-			self.inventoryOpen = false
+		elseif key == "x" or key == "return" then
+			if self.state ~= "weapon" and self.weapon then
+				self.state = "weapon"
+				self.weapon:trigger()
+			end
 		end
 	end
 end

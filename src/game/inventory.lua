@@ -1,14 +1,17 @@
 ---@class Inventory : Clazz
 Classes.inventory = Clazz()
 
-function Classes.inventory:init()
+---@param game GameState
+function Classes.inventory:init(game)
+	self.game = game
+
 	self.x = 1
 	self.y = 1
 
 	self.width = 6
 	self.height = 3
 
-	self.selectedWeapon = "shotgun"
+	self.selectedWeapon = false
 end
 
 function Classes.inventory:draw()
@@ -22,21 +25,21 @@ function Classes.inventory:draw()
 	end
 
 	--weapons
-	local selectedWeapon
+	self.selectedWeapon = false
 	for name, weapon in pairs(Weapons) do
 		love.graphics.draw(Texture.weapon[name], 6 + (weapon.x - 1) * 26, 6 + (weapon.y - 1) * 26)
 
 		if weapon.x == self.x and weapon.y == self.y then
-			selectedWeapon = weapon
+			self.selectedWeapon = weapon
 		end
 	end
 
-	if selectedWeapon then
-		love.graphics.print(selectedWeapon.description:lower(), 3, 127)
+	if self.selectedWeapon then
+		love.graphics.print(self.selectedWeapon.description:lower(), 3, 127)
 
-		love.graphics.print(tostring(selectedWeapon.berries), 37, 108)
-		love.graphics.print(tostring(selectedWeapon.wood), 37 + 36, 108)
-		love.graphics.print(tostring(selectedWeapon.crystals), 37 + 36 * 2, 108)
+		love.graphics.print(tostring(self.selectedWeapon.berries), 37, 108)
+		love.graphics.print(tostring(self.selectedWeapon.wood), 37 + 36, 108)
+		love.graphics.print(tostring(self.selectedWeapon.crystals), 37 + 36 * 2, 108)
 	end
 
 	love.graphics.draw(Texture.selectedSlot, 3 + (self.x - 1) * 26, 3 + (self.y - 1) * 26)
@@ -59,5 +62,14 @@ function Classes.inventory:keypressed(key)
 	end
 	if key == "down" then
 		self.y = math.min(self.height, self.y + 1)
+	end
+
+	if self.game.inventoryOpen and (key == "space" or key == "escape" or key == "return") then
+		self.game.inventoryOpen = false
+
+		self.game.weapon = nil
+		if self.selectedWeapon then
+			self.game.weapon = self.selectedWeapon(self.game)
+		end
 	end
 end

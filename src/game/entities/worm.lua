@@ -16,6 +16,8 @@ function Classes.worm:init(game, enemy, x, y)
 	self.vx = 0
 	self.vy = 0
 
+	self.right = x > self.game.level.width / 2
+
 	self.pressingLeft = false
 	self.pressingRight = false
 	self.pressingJump = false
@@ -69,9 +71,11 @@ function Classes.worm:update(dt)
 	end
 	if self.pressingLeft and not self.pressingRight then
 		self.vx = math.min(self.vx, onGround and -7 or -3)
+		self.right = true
 	end
 	if not self.pressingLeft and self.pressingRight then
 		self.vx = math.max(self.vx, onGround and 7 or 3)
+		self.right = false
 	end
 
 	self.vy = self.vy + 10 * dt

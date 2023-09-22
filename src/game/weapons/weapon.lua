@@ -6,7 +6,7 @@ class.y = 1
 
 class.description = ""
 
-class.berries = 0
+class.berries = 1
 class.wood = 0
 class.crystals = 0
 
