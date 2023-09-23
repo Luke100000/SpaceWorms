@@ -26,6 +26,8 @@ function Classes.worm:init(game, enemy, x, y)
 	self.right = x > self.game.level.width / 2
 	self.aim = 0
 
+	self.seed = math.random()
+
 	self.pressingLeft = false
 	self.pressingRight = false
 	self.pressingJump = false
@@ -33,7 +35,32 @@ function Classes.worm:init(game, enemy, x, y)
 end
 
 function Classes.worm:draw()
-	love.graphics.rectangle("fill", self.x, self.y, self.width, self.height)
+	if self.dying > 0 then
+		local tex = self.enemy and Texture.enemyWormDies or Texture.friendlyWormDies
+		local frame = math.max(1, math.min(10, math.ceil(self.dying / 3 * 10)))
+		love.graphics.draw(tex, Quads.death[frame], math.floor(self.x + 0.5), math.floor(self.y + 0.5), 0,
+			self.right and -1 or 1, 1, 3, 3)
+	else
+		local quad = "normal"
+		if self.vy < 0 then
+			quad = "jump"
+		else
+			local time = self.seed + love.timer.getTime() * (1.0 + self.seed * 0.1)
+			if self.game:getCurrentEntity() == self and time % 1 > 0.5 then
+				if self.pressingLeft or self.pressingRight then
+					quad = "walk"
+				else
+					quad = "idle"
+				end
+			elseif time % 1 > 0.5 then
+				quad = "look"
+			end
+		end
+
+		local tex = self.enemy and Texture.enemyWorm or Texture.friendlyWorm
+		love.graphics.draw(tex, Quads.worms[quad], math.floor(self.x + 0.5), math.floor(self.y + 0.5), 0,
+			self.right and -1 or 1, 1, 3, 3)
+	end
 end
 
 function Classes.worm:collides()
@@ -79,10 +106,10 @@ function Classes.worm:update(dt)
 			end
 		end
 		if self.pressingLeft and not self.pressingRight then
-			self.vx = math.min(self.vx, onGround and -7 or -3)
+			self.vx = math.min(self.vx, onGround and -7 or -5)
 		end
 		if not self.pressingLeft and self.pressingRight then
-			self.vx = math.max(self.vx, onGround and 7 or 3)
+			self.vx = math.max(self.vx, onGround and 7 or 5)
 		end
 	end
 
@@ -118,6 +145,8 @@ function Classes.worm:update(dt)
 	local animationSpeed = 0.25 * dt
 	local d = math.max(-animationSpeed, math.min(animationSpeed, self.health - self.lazyHealth))
 	self.lazyHealth = self.lazyHealth + d
+
+	return self.x ~= oldX or self.y ~= oldY
 end
 
 ---Hurts the worm

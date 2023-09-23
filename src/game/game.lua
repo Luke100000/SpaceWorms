@@ -34,7 +34,7 @@ function Classes.game:init(level, humanPlayerTwo)
 
 	self.currentPlayer = false
 	self.currentEnemy = false
-	self.isPlayerTurn = true
+	self.isPlayerTurn = false
 
 	self:nextTurn()
 
@@ -62,6 +62,7 @@ end
 
 function Classes.game:nextTurn()
 	self.isPlayerTurn = not self.isPlayerTurn
+	self.turnTimer = 0
 
 	self:nextEntity()
 
@@ -112,6 +113,11 @@ function Classes.game:draw()
 		-- overlay
 		love.graphics.draw(Texture.ingameMenu)
 
+		-- who's turn is it
+		if self.turnTimer < 3 then
+			love.graphics.printf(self.isPlayerTurn and "player's turn" or "enemy's turn", 0, 5, Globals.width, "center")
+		end
+
 		love.graphics.rectangle("fill", 110, 130, (1 - self.power) * 20, 8)
 
 		local fy = 0
@@ -153,6 +159,8 @@ function Classes.game:draw()
 end
 
 function Classes.game:update(dt)
+	self.turnTimer = self.turnTimer + dt
+
 	-- Control entity
 	local e = self:getCurrentEntity()
 	e:control(

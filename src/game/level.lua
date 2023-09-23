@@ -58,7 +58,7 @@ end
 ---@param y integer
 ---@returns Block
 function Classes.level:getBlock(x, y)
-	return self:isValid(x, y) and self.world[x][y] or Blocks.STONE
+	return self:isValid(x, y) and self.world[x][y] or (y < 0 and x > 0 and x <= self.width and Blocks.AIR or Blocks.STONE)
 end
 
 ---Checks if a pixel is within map

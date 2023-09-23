@@ -8,6 +8,28 @@ local meta = {
 	end
 }
 
+Quads = {
+	worms = {
+		normal = love.graphics.newQuad(0, 0, 6, 6, 18, 12),
+		look = love.graphics.newQuad(6, 0, 6, 6, 18, 12),
+		idle = love.graphics.newQuad(12, 0, 6, 6, 18, 12),
+		walk = love.graphics.newQuad(0, 6, 6, 6, 18, 12),
+		jump = love.graphics.newQuad(6, 6, 6, 6, 18, 12),
+	},
+	death = {
+		love.graphics.newQuad(0, 0, 12, 6, 12, 60),
+		love.graphics.newQuad(0, 6, 12, 6, 12, 60),
+		love.graphics.newQuad(0, 12, 12, 6, 12, 60),
+		love.graphics.newQuad(0, 18, 12, 6, 12, 60),
+		love.graphics.newQuad(0, 24, 12, 6, 12, 60),
+		love.graphics.newQuad(0, 30, 12, 6, 12, 60),
+		love.graphics.newQuad(0, 36, 12, 6, 12, 60),
+		love.graphics.newQuad(0, 42, 12, 6, 12, 60),
+		love.graphics.newQuad(0, 48, 12, 6, 12, 60),
+		love.graphics.newQuad(0, 54, 12, 6, 12, 60),
+	},
+}
+
 --index function
 local function recLoad(path, textures, prefix)
 	setmetatable(textures, meta)
