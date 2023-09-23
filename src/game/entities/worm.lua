@@ -23,7 +23,7 @@ function Classes.worm:init(game, enemy, x, y)
 	self.lazyHealth = 1.0
 	self.dying = 0.0
 
-	self.right = x > self.game.level.width / 2
+	self.right = x < self.game.level.width / 2
 	self.aim = 0
 
 	self.seed = math.random()

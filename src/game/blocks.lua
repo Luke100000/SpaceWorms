@@ -41,8 +41,9 @@ end
 
 ---@type {[string] : Block}
 Blocks = {
-	AIR = register(Block(0, 0, 0), 0, 0, 0),
-	STONE = register(Block(3, 2, 1), 255, 255, 255),
-	SPAWN_A = register(Block(0, 0, 0), 0, 255, 0),
-	SPAWN_B = register(Block(0, 0, 0), 255, 0, 0)
+	AIR = register(Block({ 0, 0, 0 }, 0, 0), 0, 0, 0),
+	STONE = register(Block({ 1.0, 0, 0 }, 2, 1), 200, 255, 255),
+	WATER = register(Block({ 1.0, 1.0, 0 }, 2, 1), 255, 255, 255),
+	SPAWN_A = register(Block({ 0, 0, 0 }, 0, 0), 0, 255, 0),
+	SPAWN_B = register(Block({ 0, 0, 0 }, 0, 0), 255, 0, 0)
 }

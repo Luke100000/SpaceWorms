@@ -30,7 +30,7 @@ function love.draw()
 	local scale = math.max(1, math.floor(math.min(w / Globals.width, h / Globals.height)))
 	love.graphics.origin()
 	love.graphics.push("all")
-	love.graphics.setShader(Shader)
+	love.graphics.setShader(MainShader)
 	love.graphics.draw(canvas, (w - Globals.width * scale) / 2, (h - Globals.height * scale) / 2, 0, scale)
 	love.graphics.pop()
 end

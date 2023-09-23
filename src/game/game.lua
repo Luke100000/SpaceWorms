@@ -103,7 +103,15 @@ function Classes.game:draw()
 		self.inventory:draw()
 	else
 		-- world
+		love.graphics.setShader(TextureShader)
+		local frame = math.floor(love.timer.getTime() * 3) % 4
+		local tex = Texture.tiles["water_" .. frame]
+		TextureShader:send("water", tex)
+		tex:setWrap("repeat")
+		TextureShader:send("animation", { 0, -love.timer.getTime() / self.level.height * 1.5 })
+		TextureShader:send("waterScale", { self.level.width / 18, self.level.height / 18 })
 		love.graphics.draw(self.level:getImage())
+		love.graphics.setShader()
 
 		-- entities
 		for _, entity in ipairs(self.entities) do

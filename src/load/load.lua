@@ -18,7 +18,8 @@ local font = love.graphics.newImageFont("textures/font.png",
 font:setLineHeight(1.2)
 love.graphics.setFont(font)
 
-Shader = love.graphics.newShader("data/shader.glsl")
+TextureShader = love.graphics.newShader("data/texture.glsl")
+MainShader = love.graphics.newShader("data/shader.glsl")
 
 local palette = {
 	-- https://lospec.com/palette-list/nintendo-gameboy-bgb
@@ -38,7 +39,7 @@ local palette = {
 	},
 }
 
-Shader:send("COLOR_0", palette.bgb[1])
-Shader:send("COLOR_1", palette.bgb[2])
-Shader:send("COLOR_2", palette.bgb[3])
-Shader:send("COLOR_3", palette.bgb[4])
+MainShader:send("COLOR_0", palette.bgb[1])
+MainShader:send("COLOR_1", palette.bgb[2])
+MainShader:send("COLOR_2", palette.bgb[3])
+MainShader:send("COLOR_3", palette.bgb[4])

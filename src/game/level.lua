@@ -47,8 +47,7 @@ end
 function Classes.level:setBlock(x, y, block)
 	if self:isValid(x, y) then
 		self.world[x][y] = block
-		local p = block.texture / 3
-		self.imageData:setPixel(x - 1, y - 1, p, p, p, 1.0)
+		self.imageData:setPixel(x - 1, y - 1, block.texture[1], block.texture[2], block.texture[3], 1.0)
 		self.dirty = true
 	end
 end
@@ -58,7 +57,8 @@ end
 ---@param y integer
 ---@returns Block
 function Classes.level:getBlock(x, y)
-	return self:isValid(x, y) and self.world[x][y] or (y < 0 and x > 0 and x <= self.width and Blocks.AIR or Blocks.STONE)
+	return self:isValid(x, y) and self.world[x][y] or
+	(y < 0 and x > 0 and x <= self.width and Blocks.AIR or Blocks.STONE)
 end
 
 ---Checks if a pixel is within map
