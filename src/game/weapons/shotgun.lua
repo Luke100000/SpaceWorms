@@ -1,7 +1,7 @@
 ---@class ShotgunWeapon : Weapon
 local class = require("src.game.weapons.weapon"):extend()
 
-class.x = 1
+class.x = 2
 class.y = 1
 
 class.description = "A shotgun"

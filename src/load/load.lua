@@ -15,7 +15,7 @@ Classes = {}
 
 local font = love.graphics.newImageFont("textures/font.png",
 	"0123456789abcdefghijklmnopqrstuvwxyz.!?:;,()[]{}><-+_*~# @$%'´`öüÖÜ")
-font:setLineHeight(1.2)
+font:setLineHeight(1.5)
 love.graphics.setFont(font)
 
 TextureShader = love.graphics.newShader("data/texture.glsl")

@@ -5,6 +5,7 @@ require("src.game.blocks")
 require("src.game.level")
 require("src.game.inventory")
 require("src.game.weapons")
+require("src.game.resources")
 
 require("src.game.entities.entity")
 require("src.game.entities.worm")
@@ -43,8 +44,11 @@ function Classes.game:init(level, humanPlayerTwo)
 	---@type Inventory
 	self.inventory = Classes.inventory(self)
 
-	---@type Weapon
-	self.weapon = nil
+	---@type Resources
+	self.resourcesA = Classes.resources()
+
+	---@type Resources
+	self.resourcesB = Classes.resources()
 end
 
 ---Returns the current entity
@@ -52,6 +56,13 @@ end
 function Classes.game:getCurrentEntity()
 	---@diagnostic disable-next-line: return-type-mismatch
 	return self.isPlayerTurn and self.currentPlayer or self.currentEnemy
+end
+
+---Returns the current resources
+---@return Resources
+function Classes.game:getCurrentResources()
+	---@diagnostic disable-next-line: return-type-mismatch
+	return self.isPlayerTurn and self.resourcesA or self.resourcesB
 end
 
 function Classes.game:addEntity(entity)
@@ -74,6 +85,9 @@ function Classes.game:nextTurn()
 	self.power = 1
 	self.endTurnTimer = 1
 	self.maxDistance = 20
+
+	---@type Weapon
+	self.weapon = nil
 end
 
 function Classes.game:nextEntity()
@@ -278,4 +292,56 @@ function Classes.game:explosion(x, y, range, strength)
 			entity:hurt(damage)
 		end
 	end
+end
+
+---Mines an area and connected stuff, returning the items mined
+---@param x number
+---@param y number
+---@param range number
+---@param extraRange number
+---@return integer berries
+---@return integer wood
+---@return integer crystals
+function Classes.game:mine(x, y, range, extraRange)
+	local todo = {}
+	for px = math.floor(x - range), math.ceil(x + range) do
+		for py = math.floor(y - range), math.ceil(y + range) do
+			local distance = math.sqrt((px - x) ^ 2 + (py - y) ^ 2)
+			if distance < range then
+				table.insert(todo, { px, py, true })
+			end
+		end
+	end
+
+	local berries, wood, crystals = 0, 0, 0
+
+	while extraRange > 0 and #todo > 0 do
+		local bx, by, free = unpack(table.remove(todo, 1))
+		local b = self.level:getBlock(bx, by)
+		if b.minable then
+			for rx = -1, 1 do
+				for ry = -1, 1 do
+					table.insert(todo, { bx + rx, by + ry, false })
+				end
+			end
+
+			berries = berries + b.berries
+			wood = wood + b.wood
+			crystals = crystals + b.crystals
+
+			if not free then
+				extraRange = extraRange - 1
+			end
+		end
+
+		if b ~= Blocks.AIR then
+			self.level:setBlock(bx, by, Blocks.AIR)
+		end
+	end
+
+	berries = math.floor(berries / 4)
+	wood = math.floor(wood / 8)
+	crystals = math.floor(crystals / 8)
+
+	return berries, wood, crystals
 end
