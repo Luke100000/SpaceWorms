@@ -104,16 +104,47 @@ function Classes.game:draw()
 	if self.inventoryOpen then
 		self.inventory:draw()
 	else
+		-- world
 		love.graphics.draw(self.level:getImage())
 
+		-- entities
 		for _, entity in ipairs(self.entities) do
 			entity:draw()
 		end
 
+		-- overlay
 		love.graphics.draw(Texture.ingameMenu)
 
 		love.graphics.rectangle("fill", 110, 130, (1 - self.power) * 20, 8)
 
+		local fy = 0
+		local ey = 0
+		for _, entity in ipairs(self.entities) do
+			if entity:instanceOf(Classes.worm) then
+				---@cast entity WormEntity
+				local x, y
+				if entity.enemy then
+					x = 60
+					ey = ey + 1
+					y = 127 + (ey - 1) * 4
+				else
+					x = 10
+					fy = fy + 1
+					y = 127 + (fy - 1) * 4
+				end
+				love.graphics.rectangle("fill", x, y, entity.health * 40, 2)
+
+				if entity == self:getCurrentEntity() then
+					if (love.timer.getTime() % 2) > 1 then
+						love.graphics.draw(Texture.arrow, x - 7, y - 1)
+					else
+						love.graphics.draw(Texture.arrow2, x - 7, y - 1)
+					end
+				end
+			end
+		end
+
+		-- weapon overlay
 		if self.state == "aim" then
 			self.weapon:draw()
 		end
@@ -198,7 +229,7 @@ function Classes.game:explosion(x, y, range, strength)
 		for py = math.floor(y - range), math.ceil(y + range) do
 			local distance = math.sqrt((px - x) ^ 2 + (py - y) ^ 2)
 			if distance < range then
-				local damage = 1 + distance / range * strength - math.random() * 0.25
+				local damage = 1 + (1 - distance / range) * strength - math.random() * 0.25
 				local block = self.level:getBlock(px, py)
 				if damage > block.health then
 					self.level:setBlock(px, py, Blocks.AIR)
@@ -210,9 +241,9 @@ function Classes.game:explosion(x, y, range, strength)
 	for _, entity in ipairs(self.entities) do
 		local distance = entity:getDistance(x, y)
 		if distance < range and entity:instanceOf(Classes.worm) then
-			local damage = (distance / range * strength - math.random()) * 5
+			local damage = (1 - distance / range) * strength * 5
 			---@cast entity WormEntity
-			entity:hurt(range)
+			entity:hurt(damage)
 		end
 	end
 end

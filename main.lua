@@ -17,13 +17,22 @@ end
 
 SwitchState(Classes.game(1, true))
 
+local canvas = love.graphics.newCanvas(Globals.width, Globals.height)
+
 function love.draw()
+	-- render
+	love.graphics.setCanvas(canvas)
+	state:draw()
+	love.graphics.setCanvas()
+
+	-- draw cannvas
 	local w, h = love.graphics.getDimensions()
 	local scale = math.max(1, math.floor(math.min(w / Globals.width, h / Globals.height)))
-	love.graphics.translate((w - Globals.width * scale) / 2, (h - Globals.height * scale) / 2)
-	love.graphics.scale(scale)
-
-	state:draw()
+	love.graphics.origin()
+	love.graphics.push("all")
+	love.graphics.setShader(Shader)
+	love.graphics.draw(canvas, (w - Globals.width * scale) / 2, (h - Globals.height * scale) / 2, 0, scale)
+	love.graphics.pop()
 end
 
 function love.update(dt)
