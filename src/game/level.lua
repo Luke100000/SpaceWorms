@@ -21,6 +21,7 @@ function Classes.level:init(level)
 	self.image = love.graphics.newImage(self.imageData)
 
 	self.dirty = false
+	self.timer = 0
 
 	self.world = {}
 	for x = 1, Classes.level.width do
@@ -47,7 +48,7 @@ end
 function Classes.level:setBlock(x, y, block)
 	if self:isValid(x, y) then
 		self.world[x][y] = block
-		self.imageData:setPixel(x - 1, y - 1, block.texture[1], block.texture[2], block.texture[3], 1.0)
+		self.imageData:setPixel(x - 1, y - 1, block.texture[1], block.texture[2], block.texture[3], block.texture[4])
 		self.dirty = true
 	end
 end
@@ -58,7 +59,7 @@ end
 ---@returns Block
 function Classes.level:getBlock(x, y)
 	return self:isValid(x, y) and self.world[x][y] or
-	(y < 0 and x > 0 and x <= self.width and Blocks.AIR or Blocks.STONE)
+		(y < 0 and x > 0 and x <= self.width and Blocks.AIR or Blocks.STONE)
 end
 
 ---Checks if a pixel is within map
@@ -93,4 +94,78 @@ function Classes.level:checkCollision(x, y, w, h)
 		end
 	end
 	return false
+end
+
+---Attempts to move a block
+---@private
+---@param x integer
+---@param y integer
+---@param tx integer
+---@param ty integer
+---@param b Block
+---@return boolean
+function Classes.level:attemptMovement(x, y, tx, ty, b)
+	local tb = self:getBlock(tx, ty)
+	if b == Blocks.WATER then
+		if tb == Blocks.AIR then
+			self:setBlock(x, y, Blocks.AIR)
+			self:setBlock(tx, ty, Blocks.WATER)
+			return true
+		elseif tb == Blocks.LAVA then
+			self:setBlock(x, y, Blocks.AIR)
+			self:setBlock(tx, ty, Blocks.STONE)
+			return true
+		end
+	elseif b == Blocks.LAVA then
+		if tb == Blocks.AIR then
+			self:setBlock(x, y, Blocks.AIR)
+			self:setBlock(tx, ty, Blocks.LAVA)
+			return true
+		elseif tb == Blocks.WATER then
+			self:setBlock(x, y, Blocks.AIR)
+			self:setBlock(tx, ty, Blocks.STONE)
+			return true
+		end
+	end
+	return false
+end
+
+function Classes.level:update(dt)
+	local actions = 0
+
+	local tickRate = 10
+
+	self.timer = self.timer + dt
+	if self.timer > 1 / tickRate then
+		self.timer = self.timer - 1 / tickRate
+		if self.timer > 10 then
+			self.timer = 0
+		end
+
+		for x = 1, self.width do
+			for y = 1, self.height do
+				local b = self:getBlock(x, y)
+				if b == Blocks.WATER then
+					local offset = math.random() < 0.5 and 1 or -1
+					if self:attemptMovement(x, y, x, y + 1, b)
+						or self:attemptMovement(x, y, x + offset, y + 1, b)
+						or self:attemptMovement(x, y, x - offset, y + 1, b)
+						or self:attemptMovement(x, y, x - offset, y, b)
+						or self:attemptMovement(x, y, x - offset, y, b) then
+						actions = actions + 1
+					end
+				end
+				if b == Blocks.LAVA then
+					local offset = math.random() < 0.5 and 1 or -1
+					if self:attemptMovement(x, y, x, y + 1, b)
+						or self:attemptMovement(x, y, x + offset, y + 1, b)
+						or self:attemptMovement(x, y, x - offset, y + 1, b) then
+						actions = actions + 1
+					end
+				end
+			end
+		end
+	end
+
+	return actions > 1
 end

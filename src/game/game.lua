@@ -99,6 +99,8 @@ function Classes.game:nextEntity()
 end
 
 function Classes.game:draw()
+	love.graphics.clear()
+
 	if self.inventoryOpen then
 		self.inventory:draw()
 	else
@@ -126,7 +128,7 @@ function Classes.game:draw()
 			love.graphics.printf(self.isPlayerTurn and "player's turn" or "enemy's turn", 0, 5, Globals.width, "center")
 		end
 
-		love.graphics.rectangle("fill", 110, 130, (1 - self.power) * 20, 8)
+		love.graphics.rectangle("fill", 110, 130, self.power * 20, 8)
 
 		local fy = 0
 		local ey = 0
@@ -178,7 +180,8 @@ function Classes.game:update(dt)
 		love.keyboard.isDown("down", "s")
 	)
 
-	local active = false
+	-- Update world
+	local active = self.level:update(dt)
 
 	if self.state == "aim" then
 		self.power = math.abs(love.timer.getTime() % 2 - 1)
@@ -187,10 +190,10 @@ function Classes.game:update(dt)
 	-- End movement phase
 	if self.state == "move" then
 		local distance = math.sqrt((self.startX - e.x) ^ 2 + (self.startY - e.y) ^ 2)
-		self.power = distance / self.maxDistance
+		self.power = 1 - distance / self.maxDistance
 
-		if self.power > 1 then
-			self.power = 1
+		if self.power < 0 then
+			self.power = 0
 			self.state = "idle"
 		end
 	end

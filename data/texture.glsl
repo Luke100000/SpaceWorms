@@ -11,6 +11,6 @@ vec4 effect(vec4 color, Image tex, vec2 tc, vec2 sc) {
 	} else if (c.b > 0.5)  {
 		return vec4(tc.x, 0.0, 0.0, 1.0);
 	} else {
-		return vec4(c.r, 0.0, 0.0, 1.0);
+		return vec4(c.r, 0.0, 0.0, c.a);
 	}
 }
