@@ -20,6 +20,7 @@ function Classes.worm:init(game, enemy, x, y)
 	self.vy = 0
 
 	self.health = 1.0
+	self.lazyHealth = 1.0
 	self.dying = 0.0
 
 	self.right = x > self.game.level.width / 2
@@ -112,6 +113,11 @@ function Classes.worm:update(dt)
 			self.dead = true
 		end
 	end
+
+	-- animate health
+	local animationSpeed = 0.25 * dt
+	local d = math.max(-animationSpeed, math.min(animationSpeed, self.health - self.lazyHealth))
+	self.lazyHealth = self.lazyHealth + d
 end
 
 ---Hurts the worm

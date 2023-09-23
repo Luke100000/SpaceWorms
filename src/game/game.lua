@@ -36,12 +36,6 @@ function Classes.game:init(level, humanPlayerTwo)
 	self.currentEnemy = false
 	self.isPlayerTurn = true
 
-	self.state = "move"
-	self.power = 1
-	self.maxDistance = 20
-
-	self.endTurnTimer = 1
-
 	self:nextTurn()
 
 	self.inventoryOpen = false
@@ -75,7 +69,10 @@ function Classes.game:nextTurn()
 	self.startX = e.x
 	self.startY = e.y
 
+	self.state = "move"
+	self.power = 1
 	self.endTurnTimer = 1
+	self.maxDistance = 20
 end
 
 function Classes.game:nextEntity()
@@ -132,6 +129,10 @@ function Classes.game:draw()
 					fy = fy + 1
 					y = 127 + (fy - 1) * 4
 				end
+
+				love.graphics.setColor(0.25, 0.25, 0.25)
+				love.graphics.rectangle("fill", x, y, entity.lazyHealth * 40, 2)
+				love.graphics.setColor(1.0, 1.0, 1.0)
 				love.graphics.rectangle("fill", x, y, entity.health * 40, 2)
 
 				if entity == self:getCurrentEntity() then
@@ -199,15 +200,23 @@ function Classes.game:update(dt)
 	end
 end
 
+function Classes.game:isActionKey(key)
+	return key == "x" or key == "return"
+end
+
+function Classes.game:isStartKey(key)
+	return key == "space" or key == "escape"
+end
+
 function Classes.game:keypressed(key)
 	if self.inventoryOpen then
 		self.inventory:keypressed(key)
 	else
-		if key == "space" and not self.inventoryOpen then
+		if (self:isStartKey(key) or self:isActionKey(key) and not self.weapon) and not self.inventoryOpen then
 			self.inventoryOpen = true
-		elseif key == "x" or key == "return" then
+		elseif self:isActionKey(key) then
 			if self.weapon then
-				if self.state ~= "aim" then
+				if self.state == "move" or self.state == "idle" then
 					self.state = "aim"
 					self.weapon:aim()
 				elseif self.state == "aim" then

@@ -28,8 +28,8 @@ function Classes.bullet:collides()
 end
 
 function Classes.bullet:collidesWithEntity()
-	for _, entity in ipairs(self.game.entities) do
-		if entity ~= self.source and entity:touches(self) then
+	for i, entity in ipairs(self.game.entities) do
+		if entity ~= self and entity ~= self.source and entity:touches(self) then
 			return true
 		end
 	end
