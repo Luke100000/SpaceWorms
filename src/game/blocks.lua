@@ -1,9 +1,10 @@
 ---@class Block
 Block = Clazz()
 
-function Block:init(texture, collision)
+function Block:init(texture, collision, health)
 	self.texture = texture
 	self.collision = collision
+	self.health = health
 end
 
 ---@type table { [integer]: Block }
@@ -40,8 +41,8 @@ end
 
 ---@type {[string] : Block}
 Blocks = {
-	AIR = register(Block(0, 0), 0, 0, 0),
-	STONE = register(Block(3, 2), 255, 255, 255),
-	SPAWN_A = register(Block(0, 0), 0, 255, 0),
-	SPAWN_B = register(Block(0, 0), 255, 0, 0)
+	AIR = register(Block(0, 0, 0), 0, 0, 0),
+	STONE = register(Block(3, 2, 1), 255, 255, 255),
+	SPAWN_A = register(Block(0, 0, 0), 0, 255, 0),
+	SPAWN_B = register(Block(0, 0, 0), 255, 0, 0)
 }

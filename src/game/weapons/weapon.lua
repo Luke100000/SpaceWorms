@@ -19,6 +19,10 @@ function class:draw()
 
 end
 
+function class:aim()
+
+end
+
 function class:trigger()
 
 end

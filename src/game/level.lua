@@ -35,7 +35,7 @@ function Classes.level:init(level)
 				table.insert(self.spawns.b, { x, y })
 				block = Blocks.AIR
 			end
-			self:setPixel(x, y, block)
+			self:setBlock(x, y, block)
 		end
 	end
 end
@@ -44,7 +44,7 @@ end
 ---@param x integer
 ---@param y integer
 ---@param block Block
-function Classes.level:setPixel(x, y, block)
+function Classes.level:setBlock(x, y, block)
 	if self:isValid(x, y) then
 		self.world[x][y] = block
 		local p = block.texture / 3
@@ -58,7 +58,7 @@ end
 ---@param y integer
 ---@returns Block
 function Classes.level:getBlock(x, y)
-	return self:isValid(x, y) and self.world[x][y] or Blocks.AIR
+	return self:isValid(x, y) and self.world[x][y] or Blocks.STONE
 end
 
 ---Checks if a pixel is within map
