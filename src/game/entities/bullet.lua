@@ -47,4 +47,6 @@ function Classes.bullet:update(dt)
 
 		self.game:explosion(self.x, self.y, 16, 1.0)
 	end
+
+	return true
 end

@@ -20,7 +20,7 @@ function class:draw()
 	end
 
 	love.graphics.setColor(0.5, 0.5, 0.5)
-	love.graphics.line(e.x + e.width / 2, e.y + e.height / 2, e.x + dx * 10, e.y + dy * 10)
+	love.graphics.line(e:getCenterX(), e:getCenterY() - 2, e.x + dx * 10, e.y + dy * 10)
 	love.graphics.setColor(1, 1, 1)
 end
 
@@ -28,9 +28,13 @@ function class:trigger()
 	local e = self.game:getCurrentEntity()
 	local dx = math.cos(e.aim)
 	local dy = math.sin(e.aim)
-	local strength = 50
+	if not e.right then
+		dx = -dx
+	end
 
-	self.game:addEntity(Classes.bullet(self.game, e, e.x + e.width / 2, e.y + e.height / 2, dx * strength, dy * strength))
+	local strength = self.game.power * 50
+
+	self.game:addEntity(Classes.bullet(self.game, e, e:getCenterX(), e:getCenterY() - 2, dx * strength, dy * strength))
 end
 
 ---@param dt number

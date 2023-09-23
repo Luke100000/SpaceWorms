@@ -172,6 +172,10 @@ function Classes.game:update(dt)
 
 	local active = false
 
+	if self.state == "aim" then
+		self.power = math.abs(love.timer.getTime() % 2 - 1)
+	end
+
 	-- End movement phase
 	if self.state == "move" then
 		local distance = math.sqrt((self.startX - e.x) ^ 2 + (self.startY - e.y) ^ 2)
