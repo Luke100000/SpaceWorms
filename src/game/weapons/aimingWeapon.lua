@@ -2,6 +2,7 @@
 local class = require("src.game.weapons.weapon"):extend()
 
 class.crosshair = Texture.crosshair.shot
+class.crosshairDistance = 10
 
 class.minStrength = 5
 class.maxStrength = 30
@@ -14,7 +15,8 @@ function class:draw()
 		dx = -dx
 	end
 
-	love.graphics.draw(self.crosshair, e.x + dx * 10, e.y + dy * 10, 0, 1, 1, self.crosshair:getWidth() / 2,
+	love.graphics.draw(self.crosshair, e.x + dx * self.crosshairDistance, e.y + dy * self.crosshairDistance, 0, 1, 1,
+		self.crosshair:getWidth() / 2,
 		self.crosshair:getHeight() / 2)
 end
 
@@ -38,7 +40,7 @@ end
 ---@param dx number
 ---@param dy number
 function class:fire(e, ox, oy, dx, dy)
-	
+
 end
 
 ---@param dt number

@@ -4,7 +4,7 @@ local class = require("src.game.weapons.aimingWeapon"):extend()
 class.x = 6
 class.y = 1
 
-class.crosshair = Texture.weapon.grenade
+class.crosshair = Texture.crosshair.grenade
 
 class.icon = Texture.weapon.grenade
 class.description = "A grenade, bounces of walls but explodes on contact with worms."

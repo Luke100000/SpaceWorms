@@ -81,6 +81,8 @@ function Classes.game:nextTurn()
 
 	self.turn = self.turn + 1
 
+	self.showTeam = true
+
 	self:nextEntity()
 
 	local e = self:getCurrentEntity()
@@ -142,6 +144,28 @@ function Classes.game:draw()
 		-- entities
 		for _, entity in ipairs(self.entities) do
 			entity:draw()
+		end
+
+		-- highlight team
+		if self.showTeam then
+			for _, entity in ipairs(self.entities) do
+				---@cast entity WormEntity
+				if entity:instanceOf(Classes.worm) and entity.enemy ~= self.isPlayerTurn then
+					if entity == self:getCurrentEntity() then
+						if (love.timer.getTime() % 2) > 1 then
+							love.graphics.draw(Texture.arrow, math.floor(entity:getCenterX() + 1),
+								math.floor(entity:getCenterY() - 11), math.pi / 2)
+						else
+							love.graphics.draw(Texture.arrow2, math.floor(entity:getCenterX() + 1),
+								math.floor(entity:getCenterY() - 12), math.pi / 2)
+						end
+					else
+						love.graphics.draw(Texture.dot, math.floor(entity:getCenterX() - 1),
+							math.floor(entity:getCenterY() - 7),
+							math.floor(love.timer.getTime() * 2 + entity.seed) * math.pi / 4, 1, 1, 1, 1)
+					end
+				end
+			end
 		end
 
 		-- overlay
@@ -210,11 +234,19 @@ function Classes.game:update(dt)
 		love.keyboard.isDown("down", "s")
 	)
 
+	if self.turnTimer > 0.01 and love.keyboard.isDown("left", "a", "right", "d", "up", "w", "down", "s", "return", "space", "x") then
+		self.showTeam = false
+	end
+
 	-- Update world
 	local active = self.level:update(dt)
 
 	if self.state == "aim" then
-		self.power = math.abs(love.timer.getTime() % 2 - 1)
+		if self.weapon and self.weapon.power then
+			self.power = math.abs(love.timer.getTime() % 2 - 1)
+		else
+			self.power = 1
+		end
 	end
 
 	-- End movement phase

@@ -7,6 +7,8 @@ class.y = 1
 class.icon = Texture.weapon.bat
 class.description = ""
 
+class.power = true
+
 class.berries = 0
 class.wood = 0
 class.crystals = 0

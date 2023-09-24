@@ -9,6 +9,9 @@ class.crosshair = Texture.crosshair.orb
 class.icon = Texture.weapon.teleportationOrb
 class.description = "The teleportation orb transports you to the impact location."
 
+class.minStrength = 10
+class.maxStrength = 100
+
 ---Fire with given origin and direction
 ---@param e WormEntity
 ---@param ox number

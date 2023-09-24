@@ -9,7 +9,7 @@ vec4 effect(vec4 color, Image tex, vec2 tc, vec2 sc) {
 		vec4 w = Texel(water, (animation + tc) * waterScale);
 		return vec4(w.r, 0.0, 0.0, 1.0);
 	} else if (c.b > 0.5)  {
-		return vec4(mod(vec2(sc.x + sc.y, sc.y) * 0.5 + animation, 1.0), 0.0, 1.0);
+		return vec4(mod(vec2(sc.x + sc.y, sc.y - animation.y * 60.0) * 0.5, 1.0), 0.0, 1.0);
 	} else {
 		return vec4(c.r, 0.0, 0.0, c.a);
 	}

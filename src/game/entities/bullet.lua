@@ -5,6 +5,7 @@ class.bounciness = 0.0
 
 class.range = 10
 class.power = 1
+class.explodeOnImpact = true
 
 class.width = 1
 class.height = 1
@@ -30,7 +31,9 @@ function class:init(game, source, x, y, vx, vy)
 end
 
 function class:draw()
+	love.graphics.setColor(0.7, 0.7, 0.7)
 	love.graphics.rectangle("fill", self.x, self.y, self.width, self.height)
+	love.graphics.setColor(1, 1, 1)
 end
 
 function class:collidesWithEntity()
@@ -84,7 +87,7 @@ function class:update(dt)
 	self.vx = self.vx * (1 - flags.damping * dt)
 	self.vy = self.vy * (1 - flags.damping * dt)
 
-	if self:collidesWithEntity() then
+	if self.explodeOnImpact and self:collidesWithEntity() then
 		self.dead = true
 		self:explode()
 		return true
