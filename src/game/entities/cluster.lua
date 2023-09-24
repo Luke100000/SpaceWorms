@@ -1,5 +1,5 @@
 ---@class ClusterEntity : GrenadeEntity
-local class = require("src.game.entities.grenade"):extend()
+local class = require("src.game.entities.bullet"):extend()
 
 class.range = 5
 class.power = 0.2

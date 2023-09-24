@@ -88,6 +88,7 @@ end
 function Classes.level:checkCollision(x, y, w, h)
 	local flags = {
 		collided = false,
+		ladder = false,
 		damping = 0.0,
 		damage = 0.0,
 		instantDamage = 0.0,
@@ -96,8 +97,10 @@ function Classes.level:checkCollision(x, y, w, h)
 	for px = x, x + w - 1 do
 		for py = y, y + h - 1 do
 			local b = self:getBlock(px, py)
-			if b.collision >= 2 then
+			if b.collision == 2 then
 				flags.collided = true
+			elseif b.collision == 1 then
+				flags.ladder = true
 			end
 			flags.damping = flags.damping + b.damping * s
 			flags.damage = flags.damage * 0.75 + b.damage * 0.25
@@ -193,7 +196,7 @@ function Classes.level:getGradient(x, y)
 			if rx ~= 0 or ry ~= 0 then
 				local d = math.sqrt(rx ^ 2 + ry ^ 2)
 				local b = self:getBlock(x + rx, y + ry)
-				if b.collision >= 2 then
+				if b.collision == 2 then
 					dx = dx + rx / d
 					dy = dy + ry / d
 				end

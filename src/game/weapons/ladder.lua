@@ -11,7 +11,7 @@ class.description = "Build a makeshift ladder."
 
 function class:aim()
 	local e = self.game:getCurrentEntity()
-	for i = 1, 6 do
+	for i = 1, 9 do
 		for x = 1, 4 do
 			for y = 1, 1 do
 				local px = math.floor(e:getCenterX()) + x - 2

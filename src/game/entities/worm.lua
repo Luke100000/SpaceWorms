@@ -28,7 +28,8 @@ function class:init(game, enemy, x, y)
 
 	self.seed = math.random()
 
-	self.lastInstantDamaqe = -1
+	self.lastInstantDamage = -1
+	self.lastLadder = false
 
 	self.pressingLeft = false
 	self.pressingRight = false
@@ -78,12 +79,14 @@ function class:update(dt)
 	-- horizontal physics
 	local oldX = self.x
 	self.x = self.x + self.vx * dt
-	if self:collides().collided then
+	local flags = self:collides()
+	if flags.collided or (flags.ladder and not self.lastLadder and not self.pressingDown) then
 		local collided = true
 		for i = 1, 2 do
 			local oldY = self.y
 			self.y = self.y - i - 0.5
-			if self:collides().collided then
+			flags = self:collides()
+			if flags.collided then
 				self.y = oldY
 			else
 				collided = false
@@ -97,12 +100,14 @@ function class:update(dt)
 		end
 	end
 
+	self.lastLadder = flags.ladder
+
 	-- vertical physics
 	local onGround = false
 	local oldY = self.y
 	self.y = self.y + self.vy * dt
-	local flags = self:collides()
-	if flags.collided then
+	local verticalFlags = self:collides()
+	if verticalFlags.collided or (self.vy >= 0 and verticalFlags.ladder and not self.pressingDown) then
 		self.y = oldY
 
 		if self.vy > 0 then
@@ -112,15 +117,15 @@ function class:update(dt)
 		self.vy = 0
 		self.vx = 0
 	else
-		if flags.instantDamage > 0 and self.lastInstantDamaqe ~= self.game.turn then
-			self.lastInstantDamaqe = self.game.turn
-			self:hurt(flags.instantDamage)
+		if verticalFlags.instantDamage > 0 and self.lastInstantDamage ~= self.game.turn then
+			self.lastInstantDamage = self.game.turn
+			self:hurt(verticalFlags.instantDamage)
 		end
 	end
 
 	-- damping
-	self.vx = self.vx * (1 - flags.damping * dt)
-	self.vy = self.vy * (1 - flags.damping * dt)
+	self.vx = self.vx * (1 - verticalFlags.damping * dt)
+	self.vy = self.vy * (1 - verticalFlags.damping * dt)
 
 	-- movement
 	if self.game.state == "move" then
@@ -176,7 +181,7 @@ end
 function class:nextTurn()
 	local flags = self:collides()
 	if flags.damage > 0 then
-		self.lastInstantDamaqe = self.game.turn
+		self.lastInstantDamage = self.game.turn
 		self:hurt(flags.instantDamage)
 	end
 end
