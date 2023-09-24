@@ -1,5 +1,8 @@
----@class LavaGrenade : GrenadeEntity
-local class = require("src.game.entities.grenade"):extend()
+---@class TeleportationOrbEntity : BulletEntity
+local class = require("src.game.entities.bullet"):extend()
+
+class.width = 2
+class.height = 2
 
 function class:explode()
 	local cx = math.ceil(self:getCenterX())

@@ -1,13 +1,13 @@
 ---@class BulletEntity : Entity
-Classes.bullet = Classes.entity:extend()
+local class = require("src.game.entities.entity"):extend()
 
-Classes.bullet.bounciness = 0.0
+class.bounciness = 0.0
 
-Classes.bullet.range = 10
-Classes.bullet.power = 1
+class.range = 10
+class.power = 1
 
-Classes.bullet.width = 1
-Classes.bullet.height = 1
+class.width = 1
+class.height = 1
 
 ---@param game GameState
 ---@param source Entity
@@ -15,8 +15,8 @@ Classes.bullet.height = 1
 ---@param y number
 ---@param vx number
 ---@param vy number
-function Classes.bullet:init(game, source, x, y, vx, vy)
-	Classes.bullet.super.init(self, game)
+function class:init(game, source, x, y, vx, vy)
+	class.super.init(self, game)
 
 	self.source = source
 
@@ -29,11 +29,11 @@ function Classes.bullet:init(game, source, x, y, vx, vy)
 	self.timer = 1
 end
 
-function Classes.bullet:draw()
+function class:draw()
 	love.graphics.rectangle("fill", self.x, self.y, self.width, self.height)
 end
 
-function Classes.bullet:collidesWithEntity()
+function class:collidesWithEntity()
 	for i, entity in ipairs(self.game.entities) do
 		---@diagnostic disable-next-line: undefined-field
 		if entity ~= self and entity ~= self.source and entity.enemy ~= self.source.enemy and entity:touches(self) then
@@ -43,7 +43,7 @@ function Classes.bullet:collidesWithEntity()
 	return false
 end
 
-function Classes.bullet:update(dt)
+function class:update(dt)
 	self.x = self.x + self.vx * dt
 	self.y = self.y + self.vy * dt
 
@@ -93,6 +93,8 @@ function Classes.bullet:update(dt)
 	return true
 end
 
-function Classes.bullet:explode()
+function class:explode()
 	self.game:explosion(self:getCenterX(), self:getCenterY(), self.range, self.power)
 end
+
+return class

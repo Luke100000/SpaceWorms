@@ -1,7 +1,9 @@
 ---@class GrenadeEntity : BulletEntity
-Classes.grenade = Classes.bullet:extend()
+local class = require("src.game.entities.bullet"):extend()
 
-Classes.grenade.bounciness = 0.9
+class.bounciness = 0.9
 
-Classes.grenade.width = 3
-Classes.grenade.height = 3
+class.width = 3
+class.height = 3
+
+return class

@@ -1,15 +1,15 @@
 ---@class WormEntity : Entity
-Classes.worm = Classes.entity:extend()
+local class = require("src.game.entities.entity"):extend()
 
-Classes.worm.width = 4
-Classes.worm.height = 5
+class.width = 4
+class.height = 5
 
 ---@param game GameState
 ---@param enemy boolean
 ---@param x number
 ---@param y number
-function Classes.worm:init(game, enemy, x, y)
-	Classes.bullet.super.init(self, game)
+function class:init(game, enemy, x, y)
+	class.super.init(self, game)
 
 	self.enemy = enemy
 
@@ -36,7 +36,7 @@ function Classes.worm:init(game, enemy, x, y)
 	self.pressingDown = false
 end
 
-function Classes.worm:draw()
+function class:draw()
 	if self.dying > 0 then
 		local tex = self.enemy and Texture.enemyWormDies or Texture.friendlyWormDies
 		local frame = math.max(1, math.min(10, math.ceil(self.dying / 3 * 10)))
@@ -65,7 +65,7 @@ function Classes.worm:draw()
 	end
 end
 
-function Classes.worm:control(left, right, up, down)
+function class:control(left, right, up, down)
 	if self.health > 0 then
 		self.pressingLeft = left
 		self.pressingRight = right
@@ -74,7 +74,7 @@ function Classes.worm:control(left, right, up, down)
 	end
 end
 
-function Classes.worm:update(dt)
+function class:update(dt)
 	-- horizontal physics
 	local oldX = self.x
 	self.x = self.x + self.vx * dt
@@ -173,7 +173,7 @@ function Classes.worm:update(dt)
 	return self.x ~= oldX or self.y ~= oldY
 end
 
-function Classes.worm:nextTurn()
+function class:nextTurn()
 	local flags = self:collides()
 	if flags.damage > 0 then
 		self.lastInstantDamaqe = self.game.turn
@@ -183,6 +183,8 @@ end
 
 ---Hurts the worm
 ---@param damage number
-function Classes.worm:hurt(damage)
+function class:hurt(damage)
 	self.health = math.max(0, self.health - damage / 10)
 end
+
+return class

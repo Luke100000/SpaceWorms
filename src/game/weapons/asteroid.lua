@@ -1,11 +1,13 @@
----@class ShotgunWeapon : AimingWeapon
+---@class AsteroidWeapon : AimingWeapon
 local class = require("src.game.weapons.aimingWeapon"):extend()
 
-class.x = 2
-class.y = 1
+class.x = 5
+class.y = 3
 
-class.icon = Texture.weapon.shotgun
-class.description = "A shotgun"
+class.crosshair = Texture.crosshair.drop
+
+class.icon = Texture.weapon.asteroid
+class.description = ""
 
 ---Fire with given origin and direction
 ---@param e WormEntity
@@ -14,7 +16,7 @@ class.description = "A shotgun"
 ---@param dx number
 ---@param dy number
 function class:fire(e, ox, oy, dx, dy)
-	self.game:addEntity(require("src.game.entities.bullet")(self.game, e, ox, oy, dx, dy))
+	
 end
 
 return class

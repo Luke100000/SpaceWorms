@@ -16,7 +16,7 @@ class.description = "A grenade, bounces of walls but explodes on contact with wo
 ---@param dx number
 ---@param dy number
 function class:fire(e, ox, oy, dx, dy)
-	self.game:addEntity(Classes.bullet(self.game, e, ox, oy, dx, dy))
+	self.game:addEntity(require("src.game.entities.bullet")(self.game, e, ox, oy, dx, dy))
 end
 
 return class

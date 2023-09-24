@@ -2,7 +2,7 @@
 local class = require("src.game.weapons.aimingWeapon"):extend()
 
 class.x = 6
-class.y = 2
+class.y = 3
 
 class.icon = Texture.weapon.lavaGrenade
 class.description = ""
@@ -14,7 +14,7 @@ class.description = ""
 ---@param dx number
 ---@param dy number
 function class:fire(e, ox, oy, dx, dy)
-	self.game:addEntity(Classes.lavaGrenade(self.game, e, ox, oy, dx, dy))
+	self.game:addEntity(require("src.game.entities.lavaGrenade")(self.game, e, ox, oy, dx, dy))
 end
 
 return class

@@ -7,11 +7,12 @@ require("src.game.inventory")
 require("src.game.weapons")
 require("src.game.resources")
 
-require("src.game.entities.entity")
-require("src.game.entities.worm")
-require("src.game.entities.bullet")
-require("src.game.entities.grenade")
-require("src.game.entities.lavaGrenade")
+--load entity types
+for _, name in ipairs(love.filesystem.getDirectoryItems("src/game/entities")) do
+	require("src.game.entities." .. name:sub(1, #name - 4))
+end
+
+Classes.worm = require("src.game.entities.worm")
 
 ---Initializes a new game
 ---@param level number
