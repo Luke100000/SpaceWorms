@@ -39,6 +39,7 @@ function Classes.game:init(level, humanPlayerTwo)
 	self.currentEnemy = false
 	self.isPlayerTurn = false
 
+	self.turn = 0
 	self:nextTurn()
 
 	self.inventoryOpen = false
@@ -77,6 +78,8 @@ function Classes.game:nextTurn()
 	self.isPlayerTurn = not self.isPlayerTurn
 	self.turnTimer = 0
 
+	self.turn = self.turn + 1
+
 	self:nextEntity()
 
 	local e = self:getCurrentEntity()
@@ -90,6 +93,10 @@ function Classes.game:nextTurn()
 
 	---@type Weapon
 	self.weapon = nil
+
+	for _, entity in ipairs(self.entities) do
+		entity:nextTurn()
+	end
 end
 
 function Classes.game:nextEntity()

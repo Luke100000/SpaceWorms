@@ -22,6 +22,10 @@ function Classes.entity:update(dt)
 
 end
 
+function Classes.entity:nextTurn()
+
+end
+
 function Classes.entity:control(left, right, up, down)
 
 end

@@ -28,6 +28,8 @@ function Classes.worm:init(game, enemy, x, y)
 
 	self.seed = math.random()
 
+	self.lastInstantDamaqe = -1
+
 	self.pressingLeft = false
 	self.pressingRight = false
 	self.pressingJump = false
@@ -64,22 +66,24 @@ function Classes.worm:draw()
 end
 
 function Classes.worm:control(left, right, up, down)
-	self.pressingLeft = left
-	self.pressingRight = right
-	self.pressingJump = up
-	self.pressingDown = down
+	if self.health > 0 then
+		self.pressingLeft = left
+		self.pressingRight = right
+		self.pressingJump = up
+		self.pressingDown = down
+	end
 end
 
 function Classes.worm:update(dt)
 	-- horizontal physics
 	local oldX = self.x
 	self.x = self.x + self.vx * dt
-	if self:collides() then
+	if self:collides().collided then
 		local collided = true
 		for i = 1, 2 do
 			local oldY = self.y
 			self.y = self.y - i - 0.5
-			if self:collides() then
+			if self:collides().collided then
 				self.y = oldY
 			else
 				collided = false
@@ -97,7 +101,8 @@ function Classes.worm:update(dt)
 	local onGround = false
 	local oldY = self.y
 	self.y = self.y + self.vy * dt
-	if self:collides() then
+	local flags = self:collides()
+	if flags.collided then
 		self.y = oldY
 
 		if self.vy > 0 then
@@ -106,7 +111,16 @@ function Classes.worm:update(dt)
 
 		self.vy = 0
 		self.vx = 0
+	else
+		if flags.instantDamage > 0 and self.lastInstantDamaqe ~= self.game.turn then
+			self.lastInstantDamaqe = self.game.turn
+			self:hurt(flags.instantDamage)
+		end
 	end
+
+	-- damping
+	self.vx = self.vx * (1 - flags.damping * dt)
+	self.vy = self.vy * (1 - flags.damping * dt)
 
 	-- movement
 	if self.game.state == "move" then
@@ -157,6 +171,14 @@ function Classes.worm:update(dt)
 	self.lazyHealth = self.lazyHealth + d
 
 	return self.x ~= oldX or self.y ~= oldY
+end
+
+function Classes.worm:nextTurn()
+	local flags = self:collides()
+	if flags.damage > 0 then
+		self.lastInstantDamaqe = self.game.turn
+		self:hurt(flags.instantDamage)
+	end
 end
 
 ---Hurts the worm

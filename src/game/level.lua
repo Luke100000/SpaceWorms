@@ -84,16 +84,27 @@ end
 ---@param y integer
 ---@param w integer
 ---@param h integer
----@return boolean
+---@return table
 function Classes.level:checkCollision(x, y, w, h)
+	local flags = {
+		collided = false,
+		damping = 0.0,
+		damage = 0.0,
+		instantDamage = 0.0,
+	}
+	local s = 1 / (w * h)
 	for px = x, x + w - 1 do
 		for py = y, y + h - 1 do
-			if self:getBlock(px, py).collision >= 2 then
-				return true
+			local b = self:getBlock(px, py)
+			if b.collision >= 2 then
+				flags.collided = true
 			end
+			flags.damping = flags.damping + b.damping * s
+			flags.damage = flags.damage * 0.75 + b.damage * 0.25
+			flags.instantDamage = math.max(flags.instantDamage, b.instantDamage)
 		end
 	end
-	return false
+	return flags
 end
 
 ---Attempts to move a block

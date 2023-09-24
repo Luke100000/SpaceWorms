@@ -59,7 +59,8 @@ function Classes.bullet:update(dt)
 
 	local oldX = self.x
 	local oldY = self.y
-	if self:collides() then
+	local flags = self:collides()
+	if flags.collided then
 		if self.bounciness > 0 then
 			local nx, ny = self.game.level:getGradient(math.ceil(self:getCenterX()), math.ceil(self:getCenterY()))
 			if nx ~= 0 or ny ~= 0 then
@@ -78,6 +79,10 @@ function Classes.bullet:update(dt)
 			return true
 		end
 	end
+
+	-- damping
+	self.vx = self.vx * (1 - flags.damping * dt)
+	self.vy = self.vy * (1 - flags.damping * dt)
 
 	if self:collidesWithEntity() then
 		self.dead = true

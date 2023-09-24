@@ -4,6 +4,8 @@ local class = require("src.game.weapons.aimingWeapon"):extend()
 class.x = 4
 class.y = 1
 
+class.crosshair = Texture.weapon.bat
+
 class.icon = Texture.weapon.shotgun
 class.description = "A trusty piece of wood to bonk a worm into lava lakes."
 

@@ -6,6 +6,10 @@ function Block:init(texture, collision, health, flags)
 	self.collision = collision
 	self.health = health
 
+	self.damping = flags.damping or 0.0
+	self.damage = flags.damage or 0.0
+	self.instantDamage = flags.instantDamage or 0.0
+
 	self.minable = flags.berries or flags.wood or flags.crystals
 	self.berries = flags.berries or 0
 	self.wood = flags.wood or 0
@@ -49,8 +53,8 @@ Blocks = {
 	AIR = register(Block({ 0, 0, 0, 0 }, 0, 0, {}), 0, 0, 0),
 	STONE = register(Block({ 1.0, 0, 0, 1 }, 2, 1, {}), 255, 255, 255),
 	CRYSTAL = register(Block({ 1.0, 0, 0, 1 }, 2, 1, { crystals = 1 }), 255, 255, 255),
-	WATER = register(Block({ 1.0, 1.0, 0, 1 }, 2, 1, { damage = 1, damping = 0.1 }), 0, 255, 255),
-	LAVA = register(Block({ 1.0, 1.0, 0, 1 }, 2, 1, { damage = 5, instantDamage = 5, damping = 0.5 }), 0, 255, 255),
+	WATER = register(Block({ 1.0, 1.0, 0, 1 }, 0, 1, { damage = 1, damping = 0.25 }), 0, 255, 255),
+	LAVA = register(Block({ 1.0, 0, 1.0, 1 }, 0, 1, { damage = 2, instantDamage = 2, damping = 0.9 }), 0, 255, 255),
 	SPAWN_A = register(Block({ 0, 0, 0, 1 }, 0, 0, {}), 0, 255, 0),
 	SPAWN_B = register(Block({ 0, 0, 0, 1 }, 0, 0, {}), 255, 0, 0)
 }
