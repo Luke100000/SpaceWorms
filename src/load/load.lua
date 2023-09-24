@@ -43,3 +43,16 @@ MainShader:send("COLOR_0", palette.bgb[1])
 MainShader:send("COLOR_1", palette.bgb[2])
 MainShader:send("COLOR_2", palette.bgb[3])
 MainShader:send("COLOR_3", palette.bgb[4])
+
+local music = {
+	menu = love.audio.newSource("music/chilled_worm.ogg", "static"),
+	war = love.audio.newSource("music/worms_war.ogg", "static"),
+}
+
+function PlayMusic(name)
+	for _, m in ipairs(music) do
+		m:pause()
+	end
+	music[name]:play()
+	music[name]:setLooping(true)
+end

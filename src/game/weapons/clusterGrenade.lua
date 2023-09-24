@@ -6,6 +6,8 @@ class.y = 2
 
 class.bounciness = 0.5
 
+class.crosshair = Texture.crosshair.grenade
+
 class.icon = Texture.weapon.clusterGrenade
 class.description = ""
 

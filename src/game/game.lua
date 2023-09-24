@@ -55,6 +55,10 @@ function Classes.game:init(level, humanPlayerTwo)
 	self.resourcesB = Classes.resources()
 end
 
+function Classes.game:switch()
+	PlayMusic("war")
+end
+
 ---Returns the current entity
 ---@return WormEntity
 function Classes.game:getCurrentEntity()

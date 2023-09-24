@@ -3,6 +3,7 @@ require("src.game.game")
 require("src.menu.menu")
 
 ---@class State
+---@field switch fun(State)
 ---@field draw fun(State)
 ---@field update fun(State, number)
 ---@field keypressed fun(State, string)
@@ -13,6 +14,7 @@ local state
 ---@param s State
 function SwitchState(s)
 	state = s
+	state:switch()
 end
 
 SwitchState(Classes.game(1, true))
