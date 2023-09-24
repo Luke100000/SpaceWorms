@@ -4,6 +4,7 @@ local class = Clazz()
 class.x = 1
 class.y = 1
 
+class.icon = Texture.weapon.bat
 class.description = ""
 
 class.berries = 0

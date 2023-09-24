@@ -10,6 +10,8 @@ require("src.game.resources")
 require("src.game.entities.entity")
 require("src.game.entities.worm")
 require("src.game.entities.bullet")
+require("src.game.entities.grenade")
+require("src.game.entities.lavaGrenade")
 
 ---Initializes a new game
 ---@param level number
@@ -136,6 +138,12 @@ function Classes.game:draw()
 
 		-- overlay
 		love.graphics.draw(Texture.ingameMenu)
+		if self.state == "idle" then
+			love.graphics.print("...", 118, 130)
+		end
+		if self.weapon then
+			love.graphics.draw(self.weapon.icon, 138, 122)
+		end
 
 		-- who's turn is it
 		if self.turnTimer < 3 then
@@ -213,7 +221,7 @@ function Classes.game:update(dt)
 	end
 
 	-- Update weapon
-	if self.state == "aim" or self.state == "done" then
+	if self.weapon then
 		self.weapon:update(dt)
 	end
 
@@ -269,13 +277,15 @@ end
 ---@param x number
 ---@param y number
 ---@param range number
----@param strength number
-function Classes.game:explosion(x, y, range, strength)
+---@param blockDamage number
+---@param entityDamage number | nil
+---@param knockback number | nil
+function Classes.game:explosion(x, y, range, blockDamage, entityDamage, knockback)
 	for px = math.floor(x - range), math.ceil(x + range) do
 		for py = math.floor(y - range), math.ceil(y + range) do
 			local distance = math.sqrt((px - x) ^ 2 + (py - y) ^ 2)
 			if distance < range then
-				local damage = 1 + (1 - distance / range) * strength - math.random() * 0.25
+				local damage = 1 + (1 - distance / range) * blockDamage - math.random() * 0.25
 				local block = self.level:getBlock(px, py)
 				if damage > block.health then
 					self.level:setBlock(px, py, Blocks.AIR)
@@ -284,12 +294,29 @@ function Classes.game:explosion(x, y, range, strength)
 		end
 	end
 
+	self:bang(x, y, range, entityDamage or blockDamage * 5, knockback or blockDamage * 10)
+end
+
+---Creates an explosion, damaging blocks and entities while creating particles
+---@param x number
+---@param y number
+---@param range number
+---@param entityDamage number
+---@param knockback number
+function Classes.game:bang(x, y, range, entityDamage, knockback)
 	for _, entity in ipairs(self.entities) do
 		local distance = entity:getDistance(x, y)
 		if distance < range and entity:instanceOf(Classes.worm) then
-			local damage = (1 - distance / range) * strength * 5
+			local damage = (1 - distance / range) * (entityDamage or 5)
 			---@cast entity WormEntity
 			entity:hurt(damage)
+
+			local vx = entity.x - x
+			local vy = entity.y - y - 1
+			local d = math.sqrt(vx ^ 2 + vy ^ 2)
+			local s = (knockback or 10) / d * (1 - distance / range)
+			entity.vx = entity.vx + vx * s
+			entity.vy = entity.vy + vy * s
 		end
 	end
 end

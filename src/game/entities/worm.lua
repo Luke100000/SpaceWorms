@@ -1,7 +1,7 @@
 ---@class WormEntity : Entity
 Classes.worm = Classes.entity:extend()
 
-Classes.worm.width = 3
+Classes.worm.width = 4
 Classes.worm.height = 5
 
 ---@param game GameState
@@ -9,7 +9,7 @@ Classes.worm.height = 5
 ---@param x number
 ---@param y number
 function Classes.worm:init(game, enemy, x, y)
-	self.game = game
+	Classes.bullet.super.init(self, game)
 
 	self.enemy = enemy
 
@@ -58,13 +58,9 @@ function Classes.worm:draw()
 		end
 
 		local tex = self.enemy and Texture.enemyWorm or Texture.friendlyWorm
-		love.graphics.draw(tex, Quads.worms[quad], math.floor(self.x + 0.5), math.floor(self.y + 0.5), 0,
-			self.right and -1 or 1, 1, 3, 3)
+		love.graphics.draw(tex, Quads.worms[quad], math.ceil(self:getCenterX()) - 1, math.ceil(self:getCenterY()) - 2, 0,
+			self.right and -1 or 1, 1, 3, 4)
 	end
-end
-
-function Classes.worm:collides()
-	return self.game.level:checkCollision(math.floor(self.x), math.floor(self.y), self.width, self.height)
 end
 
 function Classes.worm:control(left, right, up, down)
@@ -79,8 +75,22 @@ function Classes.worm:update(dt)
 	local oldX = self.x
 	self.x = self.x + self.vx * dt
 	if self:collides() then
-		self.x = oldX
-		self.vx = 0
+		local collided = true
+		for i = 1, 2 do
+			local oldY = self.y
+			self.y = self.y - i - 0.5
+			if self:collides() then
+				self.y = oldY
+			else
+				collided = false
+				break
+			end
+		end
+
+		if collided then
+			self.x = oldX
+			self.vx = 0
+		end
 	end
 
 	-- vertical physics

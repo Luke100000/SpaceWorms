@@ -10,11 +10,11 @@ local meta = {
 
 Quads = {
 	worms = {
-		normal = love.graphics.newQuad(0, 0, 6, 6, 18, 12),
-		look = love.graphics.newQuad(6, 0, 6, 6, 18, 12),
-		idle = love.graphics.newQuad(12, 0, 6, 6, 18, 12),
-		walk = love.graphics.newQuad(0, 6, 6, 6, 18, 12),
-		jump = love.graphics.newQuad(6, 6, 6, 6, 18, 12),
+		normal = love.graphics.newQuad(0, 0, 6, 7, 18, 14),
+		look = love.graphics.newQuad(6, 0, 6, 7, 18, 14),
+		idle = love.graphics.newQuad(12, 0, 6, 7, 18, 14),
+		walk = love.graphics.newQuad(0, 7, 6, 7, 18, 14),
+		jump = love.graphics.newQuad(6, 7, 6, 7, 18, 14),
 	},
 	death = {
 		love.graphics.newQuad(0, 0, 12, 6, 12, 60),

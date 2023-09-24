@@ -49,7 +49,8 @@ Blocks = {
 	AIR = register(Block({ 0, 0, 0, 0 }, 0, 0, {}), 0, 0, 0),
 	STONE = register(Block({ 1.0, 0, 0, 1 }, 2, 1, {}), 255, 255, 255),
 	CRYSTAL = register(Block({ 1.0, 0, 0, 1 }, 2, 1, { crystals = 1 }), 255, 255, 255),
-	WATER = register(Block({ 1.0, 1.0, 0, 1 }, 2, 1, {}), 0, 255, 255),
+	WATER = register(Block({ 1.0, 1.0, 0, 1 }, 2, 1, { damage = 1, damping = 0.1 }), 0, 255, 255),
+	LAVA = register(Block({ 1.0, 1.0, 0, 1 }, 2, 1, { damage = 5, instantDamage = 5, damping = 0.5 }), 0, 255, 255),
 	SPAWN_A = register(Block({ 0, 0, 0, 1 }, 0, 0, {}), 0, 255, 0),
 	SPAWN_B = register(Block({ 0, 0, 0, 1 }, 0, 0, {}), 255, 0, 0)
 }

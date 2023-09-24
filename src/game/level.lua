@@ -169,3 +169,31 @@ function Classes.level:update(dt)
 
 	return actions > 1
 end
+
+---Gets the gradient of the level
+---@param x integer
+---@param y integer
+---@return number
+---@return number
+function Classes.level:getGradient(x, y)
+	local dx, dy = 0, 0
+	for rx = -2, 2 do
+		for ry = -2, 2 do
+			if rx ~= 0 or ry ~= 0 then
+				local d = math.sqrt(rx ^ 2 + ry ^ 2)
+				local b = self:getBlock(x + rx, y + ry)
+				if b.collision >= 2 then
+					dx = dx + rx / d
+					dy = dy + ry / d
+				end
+			end
+		end
+	end
+
+	local d = math.sqrt(dx ^ 2 + dy ^ 2)
+	if d > 0 then
+		return dx / d, dy / d
+	else
+		return 0, 0
+	end
+end

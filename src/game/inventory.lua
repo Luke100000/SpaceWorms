@@ -27,7 +27,7 @@ function Classes.inventory:draw()
 	--weapons
 	self.selectedWeapon = false
 	for name, weapon in pairs(Weapons) do
-		love.graphics.draw(Texture.weapon[name], 6 + (weapon.x - 1) * 26, 6 + (weapon.y - 1) * 26)
+		love.graphics.draw(Texture.weapon[name], 5 + (weapon.x - 1) * 26, 5 + (weapon.y - 1) * 26)
 
 		if weapon.x == self.x and weapon.y == self.y then
 			self.selectedWeapon = weapon

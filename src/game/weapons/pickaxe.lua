@@ -4,6 +4,7 @@ local class = require("src.game.weapons.weapon"):extend()
 class.x = 1
 class.y = 1
 
+class.icon = Texture.weapon.pickaxe
 class.description = "A rusty pickaxe! Mine wood and crystals to craft weapons."
 
 ---@param game GameState

@@ -4,7 +4,10 @@ Classes.entity = Clazz()
 Classes.entity.width = 1
 Classes.entity.height = 1
 
-function Classes.entity:init()
+---@param game GameState
+function Classes.entity:init(game)
+	self.game = game
+	
 	self.x = 0
 	self.y = 0
 
@@ -21,6 +24,10 @@ end
 
 function Classes.entity:control(left, right, up, down)
 
+end
+
+function Classes.entity:collides()
+	return self.game.level:checkCollision(math.ceil(self.x), math.ceil(self.y), self.width, self.height)
 end
 
 function Classes.entity:touches(entity)
