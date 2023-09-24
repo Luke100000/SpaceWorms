@@ -13,8 +13,10 @@ function Classes.level:init(level)
 	local image = love.image.newImageData("data/levels/" .. level .. ".png")
 
 	self.spawns = {
-		a = {},
-		b = {}
+		sa = {},
+		sb = {},
+		ma = {},
+		mb = {}
 	}
 
 	self.imageData = love.image.newImageData(self.width, self.height)
@@ -29,11 +31,18 @@ function Classes.level:init(level)
 		for y = 1, Classes.level.height do
 			local r, g, b = image:getPixel(x - 1, y - 1)
 			local block = Block.fromColor(r, g, b)
-			if block == Blocks.SPAWN_A then
-				table.insert(self.spawns.a, { x, y })
+			assert(block, "Color " .. r .. " " .. g .. " " .. b .. " does not exist!")
+			if block == Blocks.SPAWN_A_SINGLEPLAYER then
+				table.insert(self.spawns.sa, { x, y })
 				block = Blocks.AIR
-			elseif block == Blocks.SPAWN_B then
-				table.insert(self.spawns.b, { x, y })
+			elseif block == Blocks.SPAWN_B_SINGLEPLAYER then
+				table.insert(self.spawns.sb, { x, y })
+				block = Blocks.AIR
+			elseif block == Blocks.SPAWN_A_MULTIPLAYER then
+				table.insert(self.spawns.ma, { x, y })
+				block = Blocks.AIR
+			elseif block == Blocks.SPAWN_B_MULTIPLAYER then
+				table.insert(self.spawns.mb, { x, y })
 				block = Blocks.AIR
 			end
 			self:setBlock(x, y, block)

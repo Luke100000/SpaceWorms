@@ -29,10 +29,12 @@ function Classes.game:init(level, humanPlayerTwo)
 	self.entities = {}
 
 	---spawn the bois
-	for _, pos in ipairs(self.level.spawns.a) do
+	local spawnsA = self.level.spawns[self.humanPlayerTwo and "ma" or "sa"]
+	for _, pos in ipairs(#spawnsA == 0 and self.level.spawns.sa or spawnsA) do
 		self:addEntity(Classes.worm(self, false, pos[1], pos[2]))
 	end
-	for _, pos in ipairs(self.level.spawns.b) do
+	local spawnsB = self.level.spawns[self.humanPlayerTwo and "mb" or "sb"]
+	for _, pos in ipairs(#spawnsB == 0 and self.level.spawns.sb or spawnsB) do
 		self:addEntity(Classes.worm(self, true, pos[1], pos[2]))
 	end
 

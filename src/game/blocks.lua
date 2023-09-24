@@ -52,11 +52,20 @@ end
 ---@type {[string] : Block}
 Blocks = {
 	AIR = register(Block({ 0, 0, 0, 0 }, 0, 0, {}), 0, 0, 0),
-	STONE = register(Block({ 1.0, 0, 0, 1 }, 2, 1, {}), 251, 255, 255),
-	WOOD = register(Block({ 0.25, 0, 0, 1 }, 1, 0.5, {}), 255, 255, 255),
-	CRYSTAL = register(Block({ 1.0, 0, 0, 1 }, 2, 1, { crystals = 1 }), 200, 255, 255),
-	WATER = register(Block({ 1.0, 1.0, 0, 1 }, 0, 1, { damping = 0.25 }), 0, 255, 255),
-	LAVA = register(Block({ 1.0, 0, 1.0, 1 }, 0, 1, { damage = 2, instantDamage = 2, damping = 0.9 }), 0, 255, 255),
-	SPAWN_A = register(Block({ 0, 0, 0, 1 }, 0, 0, {}), 0, 255, 0),
-	SPAWN_B = register(Block({ 0, 0, 0, 1 }, 0, 0, {}), 255, 0, 0)
+	STONE = register(Block({ 1.0, 0, 0, 1 }, 2, 1, {}), 255, 255, 255),
+	WOOD = register(Block({ 0.25, 0, 0, 1 }, 1, 0.5, { wood = 1 }), 255, 136, 0),
+
+	LAVA = register(Block({ 0.0, 0, 1.0, 1 }, 0, 1, { damage = 2, instantDamage = 2, damping = 0.9 }), 255, 0, 0),
+	WATER = register(Block({ 0.0, 1.0, 0, 1 }, 0, 1, { damping = 0.25 }), 0, 148, 255),
+
+	CRYSTAL = register(Block({ 0, 0, 1.0, 1 }, 2, 1, { crystals = 1 }), 0, 255, 255),
+
+	PLANT_0 = register(Block({ 0.3, 0, 0, 1 }, 0, 0.25, { berries = 1 }), 127, 0, 55),
+	PLANT_1 = register(Block({ 0.6, 0, 0, 1 }, 0, 0.25, { berries = 1 }), 255, 0, 110),
+	PLANT_2 = register(Block({ 1.0, 0, 0, 1 }, 0, 0.25, { berries = 1 }), 255, 0, 220),
+
+	SPAWN_A_SINGLEPLAYER = register(Block({ 0, 0, 0, 1 }, 0, 0, {}), 255, 216, 0),
+	SPAWN_B_SINGLEPLAYER = register(Block({ 0, 0, 0, 1 }, 0, 0, {}), 127, 106, 0),
+	SPAWN_A_MULTIPLAYER = register(Block({ 0, 0, 0, 1 }, 0, 0, {}), 255, 178, 127),
+	SPAWN_B_MULTIPLAYER = register(Block({ 0, 0, 0, 1 }, 0, 0, {}), 255, 127, 127)
 }
