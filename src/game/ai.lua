@@ -18,7 +18,7 @@ function Classes.ai:nextTurn()
 	self.tasks = nil
 	if not self.game.isPlayerTurn and not self.game.humanPlayerTwo then
 		self.tasks = {}
-		while #self.tasks < 1000 do
+		while #self.tasks < 500 do
 			for _, movementType in ipairs({
 				{ direction = "left",  jumping = false },
 				{ direction = "left",  jumping = true },
@@ -75,9 +75,11 @@ end
 function Classes.ai:test(task)
 	local game = self.game:clone()
 	local turn = game.turn
-	while turn == game.turn and game.turnTimer < 45 do
+	local i = 0
+	while turn == game.turn and game.turnTimer < 30 and i < 300 do
 		self:play(game, task)
-		game:updateInner(1 / 30)
+		game:updateInner(1 / 20)
+		i = i + 1
 	end
 
 	local score = game:getScore()

@@ -10,7 +10,7 @@ class.icon = Texture.weapon.grenade
 class.description = "A grenade, bounces of walls but explodes on contact with worms."
 
 class.berries = 0
-class.wood = 2
+class.wood = 1
 class.crystals = 0
 
 ---Fire with given origin and direction
@@ -20,7 +20,7 @@ class.crystals = 0
 ---@param dx number
 ---@param dy number
 function class:fire(e, ox, oy, dx, dy)
-	self.game:addEntity(require("src.game.entities.bullet")(self.game, e, ox, oy, dx, dy))
+	self.game:addEntity(require("src.game.entities.grenade")(self.game, e, ox, oy, dx, dy))
 end
 
 return class

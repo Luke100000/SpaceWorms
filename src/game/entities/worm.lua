@@ -82,15 +82,17 @@ function class:update(dt)
 	local flags = self:collides()
 	if flags.collided or (flags.ladder and not self.lastLadder and not self.pressingDown) then
 		local collided = true
-		for i = 1, 2 do
-			local oldY = self.y
-			self.y = self.y - i - 0.5
-			flags = self:collides()
-			if flags.collided then
-				self.y = oldY
-			else
-				collided = false
-				break
+		if not self.pressingDown then
+			for i = 1, 2 do
+				local oldY = self.y
+				self.y = self.y - i - 0.5
+				flags = self:collides()
+				if flags.collided then
+					self.y = oldY
+				else
+					collided = false
+					break
+				end
 			end
 		end
 

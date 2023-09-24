@@ -15,3 +15,7 @@ Weapons = {
 	teleportationOrb = require("src.game.weapons.teleportationOrb"),
 	walking = require("src.game.weapons.walking"),
 }
+
+for name, weapon in pairs(Weapons) do
+	weapon.name = name
+end

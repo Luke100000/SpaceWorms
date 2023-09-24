@@ -6,7 +6,7 @@ function Classes.menu:switch()
 end
 
 function Classes.menu:draw()
-
+	love.graphics.clear(1, 1, 1)
 end
 
 function Classes.menu:update(dt)

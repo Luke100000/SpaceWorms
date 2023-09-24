@@ -8,8 +8,6 @@ Classes.level.height = 120
 ---Initializes a new game
 ---@param level number
 function Classes.level:init(level)
-	local data = require("data.levels." .. level)
-
 	local image = love.image.newImageData("data/levels/" .. level .. ".png")
 
 	self.spawns = {

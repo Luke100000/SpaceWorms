@@ -45,7 +45,6 @@ function class:update(dt)
 			local cy = math.random(1, 8)
 			for _, r in ipairs({ { -1, 0 }, { 1, 0 }, { 0, -1 }, { 0, 1 }, { 0, 0 } }) do
 				local b = self.game.level:getBlock(cx + r[1], cy + r[2])
-				print(cx + r[1], cy + r[2], b == Blocks.AIR)
 				if b == Blocks.AIR then
 					self.game.level:setBlock(cx + r[1], cy + r[2], Blocks.WATER)
 				end

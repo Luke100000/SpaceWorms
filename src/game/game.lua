@@ -55,7 +55,7 @@ function Classes.game:init(level, humanPlayerTwo)
 	self.resourcesA = Classes.resources()
 
 	---@type Resources
-	self.resourcesB = Classes.resources()
+	self.resourcesB = Classes.resources(self.resourcesA)
 
 	self.turn = 0
 	self:nextTurn()
@@ -263,6 +263,27 @@ function Classes.game:update(dt)
 	end
 
 	self.ai:update()
+
+	local enemies = 0
+	local allies = 0
+	for _, entity in ipairs(self.entities) do
+		---@cast entity WormEntity
+		if entity:instanceOf(Classes.worm) then
+			if entity.enemy then
+				enemies = enemies + 1
+			else
+				allies = allies + 1
+			end
+		end
+	end
+
+	if enemies == 0 and allies > 0 then
+		SwitchState(Classes.menu())
+	elseif enemies == 0 and allies == 0 then
+		SwitchState(Classes.menu())
+	elseif enemies > 0 and allies == 0 then
+		SwitchState(Classes.menu())
+	end
 end
 
 function Classes.game:updateInner(dt)
@@ -327,9 +348,13 @@ end
 function Classes.game:aim()
 	local res = self:getCurrentResources()
 	if not self.weapon.paid then
-		res.berries = res.berries - self.weapon.berries
-		res.wood = res.wood - self.weapon.wood
-		res.crystals = res.crystals - self.weapon.crystals
+		if res.weapons[self.weapon.name] > 0 then
+			res.weapons[self.weapon.name] = res.weapons[self.weapon.name] - 1
+		else
+			res.berries = res.berries - self.weapon.berries
+			res.wood = res.wood - self.weapon.wood
+			res.crystals = res.crystals - self.weapon.crystals
+		end
 		self.weapon.paid = true
 	end
 	self.state = "aim"
@@ -473,25 +498,8 @@ function Classes.game:mineAndCollect(x, y, range, extraRange)
 end
 
 function Classes.game:clone()
-	local c = {}
-	for i, v in pairs(self) do
-		c[i] = v
-	end
+	local c = DeepCopy(self)
 	c.level = self.level:clone()
-	c.resourcesA = DeepCopy(self.resourcesA)
-	c.resourcesB = DeepCopy(self.resourcesB)
-	c.entities = DeepCopy(self.entities)
-
-	for index, entity in ipairs(self.entities) do
-		if entity == self.currentPlayer then
-			c.currentPlayer = c.entities[index]
-		end
-		if entity == self.currentEnemy then
-			c.currentEnemy = c.entities[index]
-		end
-	end
-
-	c.inventory = DeepCopy(self.inventory)
 	return setmetatable(c, getmetatable(self))
 end
 
@@ -512,6 +520,14 @@ function Classes.game:getScore()
 	score = score + self.resourcesB.berries * 0.2
 	score = score + self.resourcesB.berries * 0.6
 	score = score + self.resourcesB.crystals * 1.0
+
+	for _, count in pairs(self.resourcesA.weapons) do
+		score = score - 0.1 * count
+	end
+
+	for _, count in pairs(self.resourcesB.weapons) do
+		score = score + 0.1 * count
+	end
 
 	return score
 end

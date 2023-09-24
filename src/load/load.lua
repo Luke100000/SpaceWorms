@@ -1,6 +1,8 @@
 love.graphics.setDefaultFilter("nearest", "nearest")
 love.graphics.setBackgroundColor(0.1, 0.1, 0.1)
 
+math.randomseed(os.time())
+
 require("src.load.textures")
 
 Globals = {

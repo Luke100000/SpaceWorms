@@ -16,20 +16,17 @@ end
 
 function Classes.inventory:canAfford(weapon)
 	local res = self.game:getCurrentResources()
-	return res.berries >= weapon.berries and res.wood >= weapon.wood and res.crystals >= weapon.crystals
+	return res.weapons[weapon.name] > 0 or
+		(res.berries >= weapon.berries and res.wood >= weapon.wood and res.crystals >= weapon.crystals)
 end
 
 function Classes.inventory:draw()
 	love.graphics.draw(Texture.craftingMenu)
 
-	--inventory
-	for x = 1, self.width do
-		for y = 1, self.height do
-			love.graphics.draw(Texture.emptySlot, 4 + (x - 1) * 26, 4 + (y - 1) * 26)
-		end
-	end
+	local res = self.game:getCurrentResources()
 
 	--weapons
+	local lookup = {}
 	self.selectedWeapon = false
 	for name, weapon in pairs(Weapons) do
 		if not self:canAfford(weapon) then
@@ -40,6 +37,22 @@ function Classes.inventory:draw()
 
 		if weapon.x == self.x and weapon.y == self.y then
 			self.selectedWeapon = weapon
+		end
+
+		local count = res.weapons[weapon.name] or 0
+		if count > 0 then
+			love.graphics.print(tostring(count), 21 + (weapon.x - 1) * 26, 21 + (weapon.y - 1) * 26)
+		end
+
+		lookup[weapon.x * 100 + weapon.y] = weapon
+	end
+
+	--inventory
+	for x = 1, self.width do
+		for y = 1, self.height do
+			local weapon = lookup[x * 100 + y]
+			local count = weapon and res.weapons[weapon.name] or 0
+			love.graphics.draw(count > 0 and Texture.fullSlot or Texture.emptySlot, 4 + (x - 1) * 26, 4 + (y - 1) * 26)
 		end
 	end
 
@@ -59,7 +72,8 @@ function Classes.inventory:draw()
 	end
 
 	--slot selection
-	love.graphics.draw(Texture.selectedSlot, 3 + (self.x - 1) * 26, 3 + (self.y - 1) * 26)
+	local count = self.selectedWeapon and res.weapons[self.selectedWeapon.name] or 0
+	love.graphics.draw(count > 0 and Texture.selectedFullSlot or Texture.selectedSlot, 3 + (self.x - 1) * 26, 3 + (self.y - 1) * 26)
 
 	--resources
 	local res = self.game:getCurrentResources()

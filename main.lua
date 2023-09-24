@@ -17,7 +17,7 @@ function SwitchState(s)
 	state:switch()
 end
 
-SwitchState(Classes.game(1, false))
+SwitchState(Classes.game(2, false))
 
 local canvas = love.graphics.newCanvas(Globals.width, Globals.height)
 

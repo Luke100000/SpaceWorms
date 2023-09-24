@@ -3,7 +3,7 @@ local class = require("src.game.entities.entity"):extend()
 
 class.bounciness = 0.0
 
-class.range = 10
+class.range = 5
 class.power = 1
 class.explodeOnImpact = true
 
@@ -51,7 +51,7 @@ function class:update(dt)
 	self.y = self.y + self.vy * dt
 
 	local speed = math.sqrt(self.vx ^ 2 + self.vy ^ 2)
-	self.timer = self.timer - (speed < 1.0 and dt or dt * 0.05)
+	self.timer = self.timer - (speed < 3.0 and dt or dt * 0.05)
 	if self.timer < 0 then
 		self.dead = true
 		self:explode()

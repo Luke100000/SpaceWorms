@@ -13,6 +13,8 @@ class.berries = 0
 class.wood = 0
 class.crystals = 0
 
+class.name = ""
+
 ---@param game GameState
 function class:init(game)
 	self.game = game

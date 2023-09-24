@@ -13,6 +13,8 @@ class.berries = 0
 class.wood = 3
 class.crystals = 1
 
+class.maxStrength = 50
+
 ---Fire with given origin and direction
 ---@param e WormEntity
 ---@param ox number
@@ -20,7 +22,7 @@ class.crystals = 1
 ---@param dx number
 ---@param dy number
 function class:fire(e, ox, oy, dx, dy)
-	self.game:addEntity(require("src.game.entities.bullet")(self.game, e, ox, oy, dx, dy))
+	self.game:addEntity(require("src.game.entities.rocket")(self.game, e, ox, oy, dx, dy))
 end
 
 return class

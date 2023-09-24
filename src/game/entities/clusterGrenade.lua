@@ -10,7 +10,7 @@ function class:explode()
 
 	for i = 1, 5 do
 		self.game:addEntity(require("src.game.entities.cluster")(self.game, self.source, self.x, self.y,
-			(math.random() - 0.5) * 15, -10))
+			(math.random() - 0.5) * 20, -20))
 	end
 end
 

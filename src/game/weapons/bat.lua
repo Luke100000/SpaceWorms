@@ -20,7 +20,7 @@ class.crystals = 0
 ---@param dx number
 ---@param dy number
 function class:fire(e, ox, oy, dx, dy)
-	local range = 10
+	local range = 13
 
 	for _, entity in ipairs(self.game.entities) do
 		if entity ~= e then
