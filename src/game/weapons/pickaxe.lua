@@ -16,11 +16,7 @@ function class:aim()
 	self.game.state = "done"
 	local e = self.game:getCurrentEntity()
 
-	local berries, wood, crystals = self.game:mine(e.x, e.y, 8, 16)
-	local res = self.game:getCurrentResources()
-	res.berries = res.berries + berries
-	res.wood = res.wood + wood
-	res.crystals = res.crystals + crystals
+	self.game:mineAndCollect(e.x, e.y, 8, 16)
 end
 
 return class

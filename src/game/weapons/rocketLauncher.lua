@@ -9,6 +9,10 @@ class.crosshair = Texture.crosshair.rocket
 class.icon = Texture.weapon.rocketLauncher
 class.description = "Launches a high explosive rocket."
 
+class.berries = 0
+class.wood = 3
+class.crystals = 1
+
 ---Fire with given origin and direction
 ---@param e WormEntity
 ---@param ox number

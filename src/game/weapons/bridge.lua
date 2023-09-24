@@ -13,6 +13,10 @@ class.power = false
 class.minStrength = 1
 class.maxStrength = 1
 
+class.berries = 0
+class.wood = 2
+class.crystals = 0
+
 ---Fire with given origin and direction
 ---@param e WormEntity
 ---@param ox number
@@ -20,7 +24,7 @@ class.maxStrength = 1
 ---@param dx number
 ---@param dy number
 function class:fire(e, ox, oy, dx, dy)
-	for i = 1, 7 do
+	for i = 1, 9 do
 		for x = 1, 2 do
 			for y = 1, 2 do
 				local px = math.floor(ox + x + (dx > 0 and 1 or -1) * i * 3)

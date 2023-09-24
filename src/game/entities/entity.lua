@@ -49,6 +49,14 @@ function class:getCenterY()
 	return self.y + self.height / 2
 end
 
+function class:getFlooredCenterX()
+	return math.floor(self.x + self.width / 2)
+end
+
+function class:getFlooredCenterY()
+	return math.floor(self.y + self.height / 2)
+end
+
 ---Returns the distance
 ---@param x number
 ---@param y number

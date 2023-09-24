@@ -6,11 +6,11 @@ uniform vec4 COLOR_3;
 vec4 effect(vec4 color, Image tex, vec2 tc, vec2 sc) {
     vec4 c = Texel(tex, tc);
 
-	if (c.r > 0.9) {
+	if (c.r > 0.99) {
 		return COLOR_3;
 	} else if (c.r > 0.5) {
 		return COLOR_2;
-	} else if (c.r > 0.1) {
+	} else if (c.r > 0.01) {
 		return COLOR_1;
 	} else {
 		return COLOR_0;

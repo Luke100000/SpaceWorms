@@ -12,6 +12,10 @@ class.description = "The teleportation orb transports you to the impact location
 class.minStrength = 10
 class.maxStrength = 100
 
+class.berries = 3
+class.wood = 0
+class.crystals = 0
+
 ---Fire with given origin and direction
 ---@param e WormEntity
 ---@param ox number

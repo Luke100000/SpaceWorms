@@ -9,6 +9,10 @@ class.crosshair = Texture.crosshair.grenade
 class.icon = Texture.weapon.grenade
 class.description = "A grenade, bounces of walls but explodes on contact with worms."
 
+class.berries = 0
+class.wood = 2
+class.crystals = 0
+
 ---Fire with given origin and direction
 ---@param e WormEntity
 ---@param ox number

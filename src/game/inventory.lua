@@ -14,6 +14,11 @@ function Classes.inventory:init(game)
 	self.selectedWeapon = false
 end
 
+function Classes.inventory:canAfford(weapon)
+	local res = self.game:getCurrentResources()
+	return res.berries >= weapon.berries and res.wood >= weapon.wood and res.crystals >= weapon.crystals
+end
+
 function Classes.inventory:draw()
 	love.graphics.draw(Texture.craftingMenu)
 
@@ -27,7 +32,11 @@ function Classes.inventory:draw()
 	--weapons
 	self.selectedWeapon = false
 	for name, weapon in pairs(Weapons) do
+		if not self:canAfford(weapon) then
+			love.graphics.setColor(0.5, 0.5, 0.5)
+		end
 		love.graphics.draw(Texture.weapon[name], 5 + (weapon.x - 1) * 26, 5 + (weapon.y - 1) * 26)
+		love.graphics.setColor(1, 1, 1)
 
 		if weapon.x == self.x and weapon.y == self.y then
 			self.selectedWeapon = weapon
@@ -65,6 +74,10 @@ function Classes.inventory:draw()
 		self.selectedWeapon and self.selectedWeapon.crystals > 0 and Texture.materialSlot or Texture.emptyMaterialSlot,
 		10 + 36 * 2, 89)
 
+	love.graphics.draw(Texture.resources.berries, 12, 91)
+	love.graphics.draw(Texture.resources.wood, 12 + 36, 91)
+	love.graphics.draw(Texture.resources.crystals, 12 + 36 * 2, 91)
+
 	love.graphics.print(tostring(res.berries), 29, 108)
 	love.graphics.print(tostring(res.wood), 29 + 36, 108)
 	love.graphics.print(tostring(res.crystals), 29 + 36 * 2, 108)
@@ -88,7 +101,8 @@ function Classes.inventory:keypressed(key)
 		self.game.inventoryOpen = false
 
 		self.game.weapon = nil
-		if self.selectedWeapon then
+
+		if self.selectedWeapon and self:canAfford(self.selectedWeapon) then
 			self.game.weapon = self.selectedWeapon(self.game)
 		end
 	end

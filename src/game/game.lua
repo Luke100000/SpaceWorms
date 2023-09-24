@@ -301,6 +301,20 @@ function Classes.game:isStartKey(key)
 	return key == "space" or key == "escape"
 end
 
+function Classes.game:aim()
+	local res = self:getCurrentResources()
+	res.berries = res.berries - self.weapon.berries
+	res.wood = res.wood - self.weapon.wood
+	res.crystals = res.crystals - self.weapon.crystals
+	self.state = "aim"
+	self.weapon:aim()
+end
+
+function Classes.game:trigger()
+	self.state = "done"
+	self.weapon:trigger()
+end
+
 function Classes.game:keypressed(key)
 	if self.inventoryOpen then
 		self.inventory:keypressed(key)
@@ -310,11 +324,9 @@ function Classes.game:keypressed(key)
 		elseif self:isActionKey(key) then
 			if self.weapon then
 				if self.state == "move" or self.state == "idle" then
-					self.state = "aim"
-					self.weapon:aim()
+					self:aim()
 				elseif self.state == "aim" then
-					self.state = "done"
-					self.weapon:trigger()
+					self:trigger()
 				end
 			end
 		end
@@ -419,4 +431,17 @@ function Classes.game:mine(x, y, range, extraRange)
 	crystals = math.floor(crystals / 8)
 
 	return berries, wood, crystals
+end
+
+---Mines an area and connected stuff, returning the items mined
+---@param x number
+---@param y number
+---@param range number
+---@param extraRange number
+function Classes.game:mineAndCollect(x, y, range, extraRange)
+	local berries, wood, crystals = self:mine(x, y, range, extraRange)
+	local res = self:getCurrentResources()
+	res.berries = res.berries + berries
+	res.wood = res.wood + wood
+	res.crystals = res.crystals + crystals
 end

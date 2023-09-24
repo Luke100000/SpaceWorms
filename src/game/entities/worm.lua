@@ -175,6 +175,13 @@ function class:update(dt)
 	local d = math.max(-animationSpeed, math.min(animationSpeed, self.health - self.lazyHealth))
 	self.lazyHealth = self.lazyHealth + d
 
+	-- harvesting berries
+	local x, y = self:getFlooredCenterX(), self:getFlooredCenterY()
+	local b = self.game.level:getBlock(x, y)
+	if b.berries > 0 then
+		self.game:mineAndCollect(x, y, 1, 24)
+	end
+
 	return self.x ~= oldX or self.y ~= oldY
 end
 

@@ -11,6 +11,10 @@ class.crosshair = Texture.crosshair.grenade
 class.icon = Texture.weapon.clusterGrenade
 class.description = "Explodes into a set of smaller explosives."
 
+class.berries = 2
+class.wood = 2
+class.crystals = 0
+
 ---Fire with given origin and direction
 ---@param e WormEntity
 ---@param ox number

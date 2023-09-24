@@ -13,6 +13,10 @@ class.power = false
 class.maxStrength = 80
 class.crosshairDistance = class.maxStrength
 
+class.berries = 3
+class.wood = 0
+class.crystals = 0
+
 function class:init(game)
 	class.super.init(self, game)
 

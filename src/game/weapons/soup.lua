@@ -7,6 +7,10 @@ class.y = 1
 class.icon = Texture.weapon.soup
 class.description = "A tasty soup made of berries and radioactive water. Heals 50%."
 
+class.berries = 2
+class.wood = 0
+class.crystals = 0
+
 ---@param game GameState
 function class:init(game)
 	class.super.init(self, game)

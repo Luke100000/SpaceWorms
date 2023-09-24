@@ -9,6 +9,10 @@ class.crosshair = Texture.crosshair.bat
 class.icon = Texture.weapon.bat
 class.description = "A sturdy piece of wood to bonk a worm into lava lakes."
 
+class.berries = 0
+class.wood = 1
+class.crystals = 0
+
 ---Fire with given origin and direction
 ---@param e WormEntity
 ---@param ox number

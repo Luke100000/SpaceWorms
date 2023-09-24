@@ -9,6 +9,10 @@ class.crosshair = Texture.crosshair.building
 class.icon = Texture.weapon.ladder
 class.description = "Build a makeshift ladder."
 
+class.berries = 0
+class.wood = 1
+class.crystals = 0
+
 function class:aim()
 	local e = self.game:getCurrentEntity()
 	for i = 1, 9 do

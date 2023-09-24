@@ -10,6 +10,10 @@ class.power = false
 class.icon = Texture.weapon.doubleBerryShogun
 class.description = "Kill one bird with two shots."
 
+class.berries = 2
+class.wood = 2
+class.crystals = 0
+
 function class:init(game)
 	class.super.init(self, game)
 
