@@ -6,6 +6,7 @@ require("src.game.level")
 require("src.game.inventory")
 require("src.game.weapons")
 require("src.game.resources")
+require("src.game.ai")
 
 --load entity types
 for _, name in ipairs(love.filesystem.getDirectoryItems("src/game/entities")) do
@@ -42,8 +43,8 @@ function Classes.game:init(level, humanPlayerTwo)
 	self.currentEnemy = false
 	self.isPlayerTurn = false
 
-	self.turn = 0
-	self:nextTurn()
+	---@type AI
+	self.ai = Classes.ai(self)
 
 	self.inventoryOpen = false
 
@@ -55,6 +56,9 @@ function Classes.game:init(level, humanPlayerTwo)
 
 	---@type Resources
 	self.resourcesB = Classes.resources()
+
+	self.turn = 0
+	self:nextTurn()
 end
 
 function Classes.game:switch()
@@ -106,6 +110,8 @@ function Classes.game:nextTurn()
 	for _, entity in ipairs(self.entities) do
 		entity:nextTurn()
 	end
+
+	self.ai:nextTurn()
 end
 
 function Classes.game:nextEntity()
@@ -184,9 +190,11 @@ function Classes.game:draw()
 		end
 
 		-- who's turn is it
+		love.graphics.setColor(0.3, 0.3, 0.3)
 		if self.turnTimer < 3 then
 			love.graphics.printf(self.isPlayerTurn and "player's turn" or "enemy's turn", 0, 5, Globals.width, "center")
 		end
+		love.graphics.setColor(1, 1, 1)
 
 		love.graphics.rectangle("fill", 110, 130, self.power * 20, 8)
 
@@ -229,22 +237,37 @@ function Classes.game:draw()
 end
 
 function Classes.game:update(dt)
-	self.turnTimer = self.turnTimer + dt
-
 	-- Control entity
 	local e = self:getCurrentEntity()
-	if not self.inventoryOpen then
-		e:control(
-			love.keyboard.isDown("left", "a"),
-			love.keyboard.isDown("right", "d"),
-			love.keyboard.isDown("up", "w"),
-			love.keyboard.isDown("down", "s")
-		)
+
+	if self.isPlayerTurn or self.humanPlayerTwo then
+		if not self.inventoryOpen then
+			e:control(
+				love.keyboard.isDown("left", "a"),
+				love.keyboard.isDown("right", "d"),
+				love.keyboard.isDown("up", "w"),
+				love.keyboard.isDown("down", "s")
+			)
+		end
 	end
 
 	if self.turnTimer > 0.01 and love.keyboard.isDown("left", "a", "right", "d", "up", "w", "down", "s", "return", "space", "x") then
 		self.showTeam = false
 	end
+
+	self:updateInner(dt)
+
+	-- End turn
+	if self.state == "done" and self.endTurnTimer < 0 then
+		self:nextTurn()
+	end
+
+	self.ai:update()
+end
+
+function Classes.game:updateInner(dt)
+	local e = self:getCurrentEntity()
+	self.turnTimer = self.turnTimer + dt
 
 	-- Update world
 	local active = self.level:update(dt)
@@ -288,7 +311,7 @@ function Classes.game:update(dt)
 		self.endTurnTimer = self.endTurnTimer - (active and 0.1 or 1) * dt
 
 		if self.endTurnTimer < 0 then
-			self:nextTurn()
+			self.turn = self.turn + 1
 		end
 	end
 end
@@ -303,9 +326,12 @@ end
 
 function Classes.game:aim()
 	local res = self:getCurrentResources()
-	res.berries = res.berries - self.weapon.berries
-	res.wood = res.wood - self.weapon.wood
-	res.crystals = res.crystals - self.weapon.crystals
+	if not self.weapon.paid then
+		res.berries = res.berries - self.weapon.berries
+		res.wood = res.wood - self.weapon.wood
+		res.crystals = res.crystals - self.weapon.crystals
+		self.weapon.paid = true
+	end
 	self.state = "aim"
 	self.weapon:aim()
 end
@@ -319,7 +345,7 @@ function Classes.game:keypressed(key)
 	if self.inventoryOpen then
 		self.inventory:keypressed(key)
 	else
-		if (self:isStartKey(key) or self:isActionKey(key) and not self.weapon) and not self.inventoryOpen and (self.state == "move" or self.state == "idle") then
+		if (self:isStartKey(key) or self:isActionKey(key) and not self.weapon) and not self.inventoryOpen and (self.state == "move" or self.state == "idle") and (self.humanPlayerTwo or self.isPlayerTurn) then
 			self.inventoryOpen = true
 		elseif self:isActionKey(key) then
 			if self.weapon then
@@ -444,4 +470,48 @@ function Classes.game:mineAndCollect(x, y, range, extraRange)
 	res.berries = res.berries + berries
 	res.wood = res.wood + wood
 	res.crystals = res.crystals + crystals
+end
+
+function Classes.game:clone()
+	local c = {}
+	for i, v in pairs(self) do
+		c[i] = v
+	end
+	c.level = self.level:clone()
+	c.resourcesA = DeepCopy(self.resourcesA)
+	c.resourcesB = DeepCopy(self.resourcesB)
+	c.entities = DeepCopy(self.entities)
+
+	for index, entity in ipairs(self.entities) do
+		if entity == self.currentPlayer then
+			c.currentPlayer = c.entities[index]
+		end
+		if entity == self.currentEnemy then
+			c.currentEnemy = c.entities[index]
+		end
+	end
+
+	c.inventory = DeepCopy(self.inventory)
+	return setmetatable(c, getmetatable(self))
+end
+
+function Classes.game:getScore()
+	local score = 0
+
+	for _, entity in ipairs(self.entities) do
+		---@cast entity WormEntity
+		if entity:instanceOf(Classes.worm) then
+			score = score + entity.health * (entity.enemy and 1 or -1)
+		end
+	end
+
+	score = score - self.resourcesA.berries * 0.2
+	score = score - self.resourcesA.berries * 0.6
+	score = score - self.resourcesA.crystals * 1.0
+
+	score = score + self.resourcesB.berries * 0.2
+	score = score + self.resourcesB.berries * 0.6
+	score = score + self.resourcesB.crystals * 1.0
+
+	return score
 end

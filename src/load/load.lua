@@ -56,3 +56,24 @@ function PlayMusic(name)
 	music[name]:play()
 	music[name]:setLooping(true)
 end
+
+function DeepCopy(orig, copies)
+	copies = copies or {}
+	local originalType = type(orig)
+	local copy
+	if originalType == "table" then
+		if copies[orig] then
+			copy = copies[orig]
+		else
+			copy = {}
+			copies[orig] = copy
+			for orig_key, orig_value in next, orig, nil do
+				copy[DeepCopy(orig_key, copies)] = DeepCopy(orig_value, copies)
+			end
+			setmetatable(copy, getmetatable(orig))
+		end
+	else
+		copy = orig
+	end
+	return copy
+end

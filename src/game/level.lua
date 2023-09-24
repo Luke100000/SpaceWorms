@@ -50,6 +50,16 @@ function Classes.level:init(level)
 	end
 end
 
+function Classes.level:clone()
+	return setmetatable({
+		imageData = false,
+		image = false,
+		dirty = false,
+		timer = self.timer,
+		world = DeepCopy(self.world)
+	}, getmetatable(self))
+end
+
 ---Sets a pixel
 ---@param x integer
 ---@param y integer
@@ -57,8 +67,10 @@ end
 function Classes.level:setBlock(x, y, block)
 	if self:isValid(x, y) then
 		self.world[x][y] = block
-		self.imageData:setPixel(x - 1, y - 1, block.texture[1], block.texture[2], block.texture[3], block.texture[4])
-		self.dirty = true
+		if self.imageData then
+			self.imageData:setPixel(x - 1, y - 1, block.texture[1], block.texture[2], block.texture[3], block.texture[4])
+			self.dirty = true
+		end
 	end
 end
 

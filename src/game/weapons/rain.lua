@@ -32,7 +32,7 @@ end
 ---@param dx number
 ---@param dy number
 function class:fire(e, ox, oy, dx, dy)
-	self.pos = dx
+	self.pos = ox + dx
 end
 
 function class:update(dt)
@@ -45,6 +45,7 @@ function class:update(dt)
 			local cy = math.random(1, 8)
 			for _, r in ipairs({ { -1, 0 }, { 1, 0 }, { 0, -1 }, { 0, 1 }, { 0, 0 } }) do
 				local b = self.game.level:getBlock(cx + r[1], cy + r[2])
+				print(cx + r[1], cy + r[2], b == Blocks.AIR)
 				if b == Blocks.AIR then
 					self.game.level:setBlock(cx + r[1], cy + r[2], Blocks.WATER)
 				end

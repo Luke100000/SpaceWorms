@@ -16,6 +16,7 @@ class.crystals = 0
 ---@param game GameState
 function class:init(game)
 	self.game = game
+	self.paid = false
 end
 
 function class:draw()
