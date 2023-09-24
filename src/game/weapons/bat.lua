@@ -6,8 +6,8 @@ class.y = 1
 
 class.crosshair = Texture.crosshair.bat
 
-class.icon = Texture.weapon.shotgun
-class.description = "A trusty piece of wood to bonk a worm into lava lakes."
+class.icon = Texture.weapon.bat
+class.description = "A sturdy piece of wood to bonk a worm into lava lakes."
 
 ---Fire with given origin and direction
 ---@param e WormEntity

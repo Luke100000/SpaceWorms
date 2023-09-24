@@ -9,7 +9,7 @@ class.bounciness = 0.5
 class.crosshair = Texture.crosshair.grenade
 
 class.icon = Texture.weapon.clusterGrenade
-class.description = ""
+class.description = "Explodes into a set of smaller explosives."
 
 ---Fire with given origin and direction
 ---@param e WormEntity

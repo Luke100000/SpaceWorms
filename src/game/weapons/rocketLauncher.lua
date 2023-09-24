@@ -1,11 +1,13 @@
----@class ShotgunWeapon : AimingWeapon
+---@class RocketLauncherWeapon : AimingWeapon
 local class = require("src.game.weapons.aimingWeapon"):extend()
 
-class.x = 2
-class.y = 1
+class.x = 3
+class.y = 2
 
-class.icon = Texture.weapon.shotgun
-class.description = "A shotgun"
+class.crosshair = Texture.crosshair.rocket
+
+class.icon = Texture.weapon.rocketLauncher
+class.description = "Launches a high explosive rocket."
 
 ---Fire with given origin and direction
 ---@param e WormEntity

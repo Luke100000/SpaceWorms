@@ -7,7 +7,7 @@ class.y = 3
 class.crosshair = Texture.crosshair.drop
 
 class.icon = Texture.weapon.asteroid
-class.description = ""
+class.description = "Summon a giant asteroid from space!"
 
 class.power = false
 class.maxStrength = 80

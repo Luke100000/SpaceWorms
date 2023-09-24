@@ -184,6 +184,11 @@ function class:nextTurn()
 		self.lastInstantDamage = self.game.turn
 		self:hurt(flags.instantDamage)
 	end
+
+	local b = self.game.level:getBlock(math.floor(self:getCenterX()), math.floor(self:getCenterX() - 2))
+	if b.damping > 0 or b.collision == 2 then
+		self:hurt(1)
+	end
 end
 
 ---Hurts the worm

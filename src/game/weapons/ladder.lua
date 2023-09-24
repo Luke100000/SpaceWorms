@@ -6,7 +6,7 @@ class.y = 3
 
 class.crosshair = Texture.crosshair.building
 
-class.icon = Texture.weapon.bridge
+class.icon = Texture.weapon.ladder
 class.description = "Build a makeshift ladder."
 
 function class:aim()

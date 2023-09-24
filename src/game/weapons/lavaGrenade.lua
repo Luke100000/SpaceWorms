@@ -7,7 +7,7 @@ class.y = 3
 class.crosshair = Texture.crosshair.grenade
 
 class.icon = Texture.weapon.lavaGrenade
-class.description = ""
+class.description = "A grenade filled with hot lava."
 
 ---Fire with given origin and direction
 ---@param e WormEntity

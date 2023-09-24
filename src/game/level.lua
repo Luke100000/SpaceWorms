@@ -157,7 +157,7 @@ function Classes.level:update(dt)
 		end
 
 		for x = 1, self.width do
-			for y = 1, self.height do
+			for y = self.height, 1, -1 do
 				local b = self:getBlock(x, y)
 				if b == Blocks.WATER then
 					local offset = math.random() < 0.5 and 1 or -1

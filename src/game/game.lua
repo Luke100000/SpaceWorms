@@ -231,12 +231,14 @@ function Classes.game:update(dt)
 
 	-- Control entity
 	local e = self:getCurrentEntity()
-	e:control(
-		love.keyboard.isDown("left", "a"),
-		love.keyboard.isDown("right", "d"),
-		love.keyboard.isDown("up", "w"),
-		love.keyboard.isDown("down", "s")
-	)
+	if not self.inventoryOpen then
+		e:control(
+			love.keyboard.isDown("left", "a"),
+			love.keyboard.isDown("right", "d"),
+			love.keyboard.isDown("up", "w"),
+			love.keyboard.isDown("down", "s")
+		)
+	end
 
 	if self.turnTimer > 0.01 and love.keyboard.isDown("left", "a", "right", "d", "up", "w", "down", "s", "return", "space", "x") then
 		self.showTeam = false
@@ -266,7 +268,7 @@ function Classes.game:update(dt)
 
 	-- Update weapon
 	if self.weapon then
-		self.weapon:update(dt)
+		active = self.weapon:update(dt) or active
 	end
 
 	-- Update entities
@@ -301,7 +303,7 @@ function Classes.game:keypressed(key)
 	if self.inventoryOpen then
 		self.inventory:keypressed(key)
 	else
-		if (self:isStartKey(key) or self:isActionKey(key) and not self.weapon) and not self.inventoryOpen then
+		if (self:isStartKey(key) or self:isActionKey(key) and not self.weapon) and not self.inventoryOpen and (self.state == "move" or self.state == "idle") then
 			self.inventoryOpen = true
 		elseif self:isActionKey(key) then
 			if self.weapon then
