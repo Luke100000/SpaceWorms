@@ -70,11 +70,12 @@ end
 ---@param block Block
 function Classes.level:setBlock(x, y, block)
 	if self:isValid(x, y) then
+		local b = self.world[x][y]
 		self.world[x][y] = block
 		if self.imageData then
 			self.imageData:setPixel(x - 1, y - 1, block.texture[1], block.texture[2], block.texture[3], block.texture[4])
 			self.dirty = true
-			if self.particles and block == Blocks.AIR and math.random() < 0.1 then
+			if self.particles and b.collision == 2 and block == Blocks.AIR and math.random() < 0.1 then
 				table.insert(self.particles, Classes.particle(x - 0.5, y - 0.5))
 			end
 		end

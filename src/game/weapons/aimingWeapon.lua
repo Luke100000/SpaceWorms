@@ -5,7 +5,7 @@ class.crosshair = Texture.crosshair.shot
 class.crosshairDistance = 10
 
 class.minStrength = 5
-class.maxStrength = 30
+class.maxStrength = 40
 
 function class:draw()
 	local e = self.game:getCurrentEntity()

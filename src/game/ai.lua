@@ -109,6 +109,10 @@ function Classes.ai:update()
 	else
 		self.game.turnTimer = 0
 	end
+
+	if self.game.turnTimer > 15 then
+		self.game.state = "done"
+	end
 end
 
 function Classes.ai:playLike(game, movementMode, attackMode)

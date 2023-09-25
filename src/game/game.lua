@@ -343,6 +343,10 @@ function Classes.game:updateInner(dt)
 		end
 	end
 
+	if e.dead then
+		self.state = "done"
+	end
+
 	-- End turn
 	if self.state == "done" then
 		self.endTurnTimer = self.endTurnTimer - (active and 0.1 or 1) * dt
@@ -496,7 +500,7 @@ function Classes.game:mine(x, y, range, extraRange)
 	end
 
 	berries = math.floor(berries / 5)
-	wood = math.floor(wood / 4)
+	wood = math.floor(wood / 3)
 	crystals = math.floor(crystals / 4)
 
 	return berries, wood, crystals

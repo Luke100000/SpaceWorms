@@ -6,10 +6,11 @@ for i = 1, 9 do
 	maps[i] = love.graphics.newImage("data/levels/" .. i .. ".png")
 end
 
+local human = false
+
 function Classes.menu:init()
 	self.x = 1
 	self.y = 1
-	self.human = false
 	self.progress = {}
 	for i = 1, 9 do
 		self.progress[i] = love.filesystem.getInfo(tostring(i))
@@ -38,7 +39,7 @@ function Classes.menu:draw()
 
 	love.graphics.draw(Texture.levelSlotSelected, (self.x - 1) * 52 + 4, (self.y - 1) * 41 + 4)
 
-	love.graphics.printf(self.human and "space for cpu" or "space for coop", 0, 132, Globals.width, "center")
+	love.graphics.printf(human and "space for cpu" or "space for coop", 0, 132, Globals.width, "center")
 end
 
 function Classes.menu:update(dt)
@@ -64,10 +65,10 @@ function Classes.menu:keypressed(key)
 	end
 
 	if key == "return" then
-		SwitchState(Classes.game(self.x + (self.y - 1) * 3, self.human))
+		SwitchState(Classes.game(self.x + (self.y - 1) * 3, human))
 	end
 
 	if key == "space" then
-		self.human = not self.human
+		human = not human
 	end
 end
