@@ -206,7 +206,9 @@ function Classes.game:draw()
 
 		-- who's turn is it
 		love.graphics.setColor(0.3, 0.3, 0.3)
-		if self.turnTimer < 3 then
+		if not self.humanPlayerTwo and not self.isPlayerTurn then
+			love.graphics.printf(math.max(0, 100 - math.ceil(#self.ai.tasks  / self.ai.maxTasks * 100)) .. "%", 0, 5, Globals.width, "center")
+		elseif self.turnTimer < 3 then
 			love.graphics.printf(self.isPlayerTurn and "player's turn" or "enemy's turn", 0, 5, Globals.width, "center")
 		end
 		love.graphics.setColor(1, 1, 1)

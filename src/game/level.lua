@@ -54,13 +54,24 @@ function Classes.level:init(level)
 	self.particles = {}
 end
 
+local function copyWorld(world)
+	local w = {}
+	for x = 1, Classes.level.width do
+		w[x] = {}
+		for y = 1, Classes.level.height do
+			w[x][y] = world[x][y]
+		end
+	end
+	return w
+end
+
 function Classes.level:clone()
 	return setmetatable({
 		imageData = false,
 		image = false,
 		dirty = false,
 		timer = self.timer,
-		world = DeepCopy(self.world)
+		world = copyWorld(self.world)
 	}, getmetatable(self))
 end
 
@@ -175,8 +186,11 @@ end
 
 function Classes.level:update(dt)
 	local actions = 0
-
 	local tickRate = 10
+
+	if Globals.AI then
+		return
+	end
 
 	self.timer = self.timer + dt
 	if self.timer > 1 / tickRate then

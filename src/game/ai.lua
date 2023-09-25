@@ -4,7 +4,7 @@ Classes.ai = Clazz()
 ---@param game GameState
 function Classes.ai:init(game)
 	self.game = game
-	self.negatives = { }
+	self.negatives = {}
 end
 
 local function shuffleInPlace(t)
@@ -18,7 +18,7 @@ function Classes.ai:nextTurn()
 	self.tasks = nil
 	if not self.game.isPlayerTurn and not self.game.humanPlayerTwo then
 		self.tasks = {}
-		while #self.tasks < 500 do
+		while #self.tasks < 300 do
 			for _, movementType in ipairs({
 				{ direction = "left",  jumping = false },
 				{ direction = "left",  jumping = true },
@@ -41,6 +41,8 @@ function Classes.ai:nextTurn()
 		end
 
 		shuffleInPlace(self.tasks)
+
+		self.maxTasks = #self.tasks
 	end
 
 	self.bestTask = self.tasks and self.tasks[0]
@@ -77,9 +79,9 @@ function Classes.ai:test(task)
 	local game = self.game:clone()
 	local turn = game.turn
 	local i = 0
-	while turn == game.turn and game.turnTimer < 30 and i < 300 do
+	while turn == game.turn and game.turnTimer < 30 and i < 200 do
 		self:play(game, task)
-		game:updateInner(1 / 20)
+		game:updateInner(1 / 10)
 		i = i + 1
 	end
 
@@ -100,7 +102,7 @@ function Classes.ai:update()
 	end
 
 	local t = love.timer.getTime()
-	while love.timer.getTime() - t < 10 / 1000 and #self.tasks > 0 do
+	while love.timer.getTime() - t < 10 / 300 and #self.tasks > 0 do
 		self:test(table.remove(self.tasks))
 	end
 
