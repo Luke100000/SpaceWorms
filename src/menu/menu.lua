@@ -48,15 +48,19 @@ end
 function Classes.menu:keypressed(key)
 	if key == "left" then
 		self.x = math.max(1, self.x - 1)
+		PlaySound("click")
 	end
 	if key == "right" then
 		self.x = math.min(3, self.x + 1)
+		PlaySound("click")
 	end
 	if key == "up" then
 		self.y = math.max(1, self.y - 1)
+		PlaySound("click")
 	end
 	if key == "down" then
 		self.y = math.min(3, self.y + 1)
+		PlaySound("click")
 	end
 
 	if key == "return" then

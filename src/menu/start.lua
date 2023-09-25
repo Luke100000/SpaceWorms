@@ -25,5 +25,6 @@ end
 function Classes.start:keypressed(key)
 	if self.timer > 0.1 then
 		SwitchState(Classes.menu())
+		PlaySound("explosion")
 	end
 end

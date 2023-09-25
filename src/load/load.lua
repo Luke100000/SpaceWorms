@@ -8,6 +8,7 @@ require("src.load.textures")
 Globals = {
 	width = 160,
 	height = 144,
+	AI = false,
 }
 
 Clazz = require("libs.clazz")
@@ -84,4 +85,16 @@ function DeepCopy(orig, copies)
 		copy = orig
 	end
 	return copy
+end
+
+local sounds = {}
+for _, name in ipairs(love.filesystem.getDirectoryItems("sounds")) do
+	sounds[name:sub(1, #name - 4)] = love.audio.newSource("sounds/" .. name, "static")
+end
+
+function PlaySound(name)
+	if not Globals.AI then
+		sounds[name]:seek(0)
+		sounds[name]:play()
+	end
 end

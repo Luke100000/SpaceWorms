@@ -20,6 +20,7 @@ class.crystals = 0
 ---@param dx number
 ---@param dy number
 function class:fire(e, ox, oy, dx, dy)
+	PlaySound("throw")
 	self.game:addEntity(require("src.game.entities.grenade")(self.game, e, ox, oy, dx, dy))
 end
 

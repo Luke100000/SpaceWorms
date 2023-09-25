@@ -134,6 +134,7 @@ function class:update(dt)
 		if onGround then
 			if self.pressingJump then
 				self.vy = -15
+				PlaySound("jump")
 			end
 		end
 		if self.pressingLeft and not self.pressingRight then
@@ -204,6 +205,7 @@ end
 ---@param damage number
 function class:hurt(damage)
 	self.health = math.max(0, self.health - damage / 10)
+	PlaySound("hurt")
 end
 
 return class

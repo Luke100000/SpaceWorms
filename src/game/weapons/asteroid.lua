@@ -26,6 +26,7 @@ class.crystals = 3
 function class:fire(e, ox, oy, dx, dy)
 	local size = 3
 	local tx = math.max(size, math.min(self.game.level.width - size, ox + dx))
+	PlaySound("click")
 	self.game:addEntity(require("src.game.entities.asteroid")(self.game, e, tx, -size, 0, 30))
 end
 

@@ -100,15 +100,19 @@ end
 function Classes.inventory:keypressed(key)
 	if key == "left" then
 		self.x = math.max(1, self.x - 1)
+		PlaySound("click")
 	end
 	if key == "right" then
 		self.x = math.min(self.width, self.x + 1)
+		PlaySound("click")
 	end
 	if key == "up" then
 		self.y = math.max(1, self.y - 1)
+		PlaySound("click")
 	end
 	if key == "down" then
 		self.y = math.min(self.height, self.y + 1)
+		PlaySound("click")
 	end
 
 	if self.game.inventoryOpen and (key == "space" or key == "escape" or key == "return") then

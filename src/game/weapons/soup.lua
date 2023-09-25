@@ -20,6 +20,7 @@ function class:aim()
 	self.game.state = "done"
 	local e = self.game:getCurrentEntity()
 
+	PlaySound("pickup")
 	e.health = e.health + (1 - e.health) * 0.5
 end
 

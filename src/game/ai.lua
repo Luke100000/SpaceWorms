@@ -73,6 +73,7 @@ function Classes.ai:play(game, task)
 end
 
 function Classes.ai:test(task)
+	Globals.AI = true
 	local game = self.game:clone()
 	local turn = game.turn
 	local i = 0
@@ -90,6 +91,7 @@ function Classes.ai:test(task)
 		self.bestScore = score
 		self.bestTask = task
 	end
+	Globals.AI = false
 end
 
 function Classes.ai:update()

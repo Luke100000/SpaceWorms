@@ -417,6 +417,8 @@ function Classes.game:explosion(x, y, range, blockDamage, entityDamage, knockbac
 	end
 
 	self:bang(x, y, range, entityDamage or blockDamage * 5, knockback or blockDamage * 10)
+
+	PlaySound("explosion")
 end
 
 ---Creates an explosion, damaging blocks and entities while creating particles
@@ -488,9 +490,9 @@ function Classes.game:mine(x, y, range, extraRange)
 		end
 	end
 
-	berries = math.floor(berries / 4)
-	wood = math.floor(wood / 8)
-	crystals = math.floor(crystals / 8)
+	berries = math.floor(berries / 5)
+	wood = math.floor(wood / 4)
+	crystals = math.floor(crystals / 4)
 
 	return berries, wood, crystals
 end
@@ -503,9 +505,13 @@ end
 function Classes.game:mineAndCollect(x, y, range, extraRange)
 	local berries, wood, crystals = self:mine(x, y, range, extraRange)
 	local res = self:getCurrentResources()
-	res.berries = res.berries + berries
-	res.wood = res.wood + wood
-	res.crystals = res.crystals + crystals
+
+	if berries > 0 or wood > 0 or crystals > 0 then
+		PlaySound("pickup")
+		res.berries = res.berries + berries
+		res.wood = res.wood + wood
+		res.crystals = res.crystals + crystals
+	end
 end
 
 function Classes.game:clone()

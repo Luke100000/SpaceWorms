@@ -22,6 +22,7 @@ class.maxStrength = 50
 ---@param dx number
 ---@param dy number
 function class:fire(e, ox, oy, dx, dy)
+	PlaySound("click")
 	self.game:addEntity(require("src.game.entities.rocket")(self.game, e, ox, oy, dx, dy))
 end
 

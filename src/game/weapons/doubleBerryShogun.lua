@@ -27,6 +27,7 @@ end
 ---@param dx number
 ---@param dy number
 function class:fire(e, ox, oy, dx, dy)
+	PlaySound("shot")
 	self.game:addEntity(require("src.game.entities.bullet")(self.game, e, ox, oy, dx, dy))
 
 	self.ammo = self.ammo - 1
