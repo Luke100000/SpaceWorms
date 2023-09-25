@@ -145,9 +145,19 @@ function Classes.game:draw()
 		-- world
 		love.graphics.setShader(TextureShader)
 		local frame = math.floor(love.timer.getTime() * 3) % 4
+
 		local tex = Texture.tiles["water_" .. frame]
-		TextureShader:send("water", tex)
 		tex:setWrap("repeat")
+		TextureShader:send("water", tex)
+
+		local tex = Texture.tiles.lava
+		tex:setWrap("repeat")
+		TextureShader:send("lava", tex)
+
+		local tex = Texture.tiles.schmiamand
+		tex:setWrap("repeat")
+		TextureShader:send("schmiamand", tex)
+
 		TextureShader:send("animation", { 0, -love.timer.getTime() / self.level.height * 1.5 })
 		TextureShader:send("waterScale", { self.level.width / 18, self.level.height / 18 })
 		love.graphics.draw(self.level:getImage())
@@ -278,8 +288,8 @@ function Classes.game:update(dt)
 	end
 
 	if enemies == 0 and allies > 0 then
-		SwitchState(Classes.menu())
 		love.filesystem.write(tostring(self.level.path), "true")
+		SwitchState(Classes.menu())
 	elseif enemies == 0 and allies == 0 then
 		SwitchState(Classes.menu())
 	elseif enemies > 0 and allies == 0 then

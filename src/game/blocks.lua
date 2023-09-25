@@ -58,7 +58,7 @@ Blocks = {
 	LAVA = register(Block({ 0.0, 0, 1.0, 1 }, 0, 1, { damage = 2, instantDamage = 2, damping = 0.9 }), 255, 0, 0),
 	WATER = register(Block({ 0.0, 1.0, 0, 1 }, 0, 1, { damping = 0.25 }), 0, 148, 255),
 
-	CRYSTAL = register(Block({ 0, 0, 1.0, 1 }, 2, 1, { crystals = 1 }), 0, 255, 255),
+	CRYSTAL = register(Block({ 0, 1.0, 1.0, 1 }, 2, 1, { crystals = 1 }), 0, 255, 255),
 
 	PLANT_0 = register(Block({ 0.3, 0, 0, 1 }, 0, 0.25, { berries = 1 }), 127, 0, 55),
 	PLANT_1 = register(Block({ 0.6, 0, 0, 1 }, 0, 0.25, { berries = 1 }), 255, 0, 110),
