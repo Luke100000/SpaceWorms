@@ -94,6 +94,7 @@ end
 
 function PlaySound(name)
 	if not Globals.AI then
+		sounds[name]:setPitch(math.random() * 0.1 + 0.95)
 		sounds[name]:seek(0)
 		sounds[name]:play()
 	end

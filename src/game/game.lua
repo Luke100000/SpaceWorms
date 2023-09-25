@@ -7,6 +7,7 @@ require("src.game.inventory")
 require("src.game.weapons")
 require("src.game.resources")
 require("src.game.ai")
+require("src.game.particle")
 
 --load entity types
 for _, name in ipairs(love.filesystem.getDirectoryItems("src/game/entities")) do
@@ -166,6 +167,10 @@ function Classes.game:draw()
 		-- entities
 		for _, entity in ipairs(self.entities) do
 			entity:draw()
+		end
+
+		for _, particle in ipairs(self.level.particles) do
+			particle:draw()
 		end
 
 		-- highlight team

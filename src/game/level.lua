@@ -25,6 +25,8 @@ function Classes.level:init(level)
 	self.dirty = false
 	self.timer = 0
 
+	self.particles = false
+
 	self.world = {}
 	for x = 1, Classes.level.width do
 		self.world[x] = {}
@@ -48,6 +50,8 @@ function Classes.level:init(level)
 			self:setBlock(x, y, block)
 		end
 	end
+
+	self.particles = {}
 end
 
 function Classes.level:clone()
@@ -70,6 +74,9 @@ function Classes.level:setBlock(x, y, block)
 		if self.imageData then
 			self.imageData:setPixel(x - 1, y - 1, block.texture[1], block.texture[2], block.texture[3], block.texture[4])
 			self.dirty = true
+			if self.particles and block == Blocks.AIR and math.random() < 0.1 then
+				table.insert(self.particles, Classes.particle(x - 0.5, y - 0.5))
+			end
 		end
 	end
 end
@@ -198,6 +205,15 @@ function Classes.level:update(dt)
 						actions = actions + 1
 					end
 				end
+			end
+		end
+	end
+
+	if self.particles then
+		for i = #self.particles, 1, -1 do
+			self.particles[i]:update(dt)
+			if self.particles[i].dead then
+				table.remove(self.particles, i)
 			end
 		end
 	end
