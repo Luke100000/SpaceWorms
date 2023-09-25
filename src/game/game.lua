@@ -258,15 +258,15 @@ function Classes.game:update(dt)
 	if self.isPlayerTurn or self.humanPlayerTwo then
 		if not self.inventoryOpen then
 			e:control(
-				love.keyboard.isDown("left", "a"),
-				love.keyboard.isDown("right", "d"),
-				love.keyboard.isDown("up", "w"),
-				love.keyboard.isDown("down", "s")
+				Key.Left(),
+				Key.Right(),
+				Key.Up(),
+				Key.Down()
 			)
 		end
 	end
 
-	if self.turnTimer > 0.01 and love.keyboard.isDown("left", "a", "right", "d", "up", "w", "down", "s", "return", "space", "x") then
+	if self.turnTimer > 0.01 and (e.pressingRight or e.pressingLeft) then
 		self.showTeam = false
 	end
 

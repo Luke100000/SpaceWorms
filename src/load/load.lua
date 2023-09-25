@@ -99,3 +99,76 @@ function PlaySound(name)
 		sounds[name]:play()
 	end
 end
+
+local joysticks = love.joystick.getJoysticks()
+
+Key = { }
+
+function Key.Up()
+	if love.keyboard.isDown("up", "w") then
+		return true
+	end
+	for _, j in ipairs(joysticks) do
+		if j:isGamepadDown("dpup") or j:getAxis(2) < -0.5 then
+			return true
+		end
+	end
+	return false
+end
+
+function Key.Down()
+	if love.keyboard.isDown("down", "s") then
+		return true
+	end
+	for _, j in ipairs(joysticks) do
+		if j:isGamepadDown("dpdown") or j:getAxis(2) > 0.5 then
+			return true
+		end
+	end
+	return false
+end
+
+function Key.Left()
+	if love.keyboard.isDown("left", "a") then
+		return true
+	end
+	for _, j in ipairs(joysticks) do
+		if j:isGamepadDown("dpleft") or j:getAxis(1) < -0.5 then
+			return true
+		end
+	end
+	return false
+end
+
+function Key.Right()
+	if love.keyboard.isDown("right", "d") then
+		return true
+	end
+	for _, j in ipairs(joysticks) do
+		if j:isGamepadDown("dpright") or j:getAxis(1) > 0.5 then
+			return true
+		end
+	end
+	return false
+end
+
+function love.gamepadpressed(joystick, button)
+	if button == "a" or button == "x" then
+		love.keypressed("return")
+	end
+	if button == "b" or button == "y" then
+		love.keypressed("space")
+	end
+	if button == "dpleft" then
+		love.keypressed("left")
+	end
+	if button == "dpright" then
+		love.keypressed("right")
+	end
+	if button == "dpup" then
+		love.keypressed("up")
+	end
+	if button == "dpdown" then
+		love.keypressed("down")
+	end
+end
