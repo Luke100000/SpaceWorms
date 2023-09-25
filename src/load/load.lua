@@ -52,11 +52,17 @@ local music = {
 }
 
 function PlayMusic(name)
-	for _, m in ipairs(music) do
+	for _, m in pairs(music) do
 		m:pause()
 	end
 	music[name]:play()
 	music[name]:setLooping(true)
+end
+
+function SetMusicVolume(volume)
+	for _, m in pairs(music) do
+		m:setVolume(volume)
+	end
 end
 
 function DeepCopy(orig, copies)

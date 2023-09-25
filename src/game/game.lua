@@ -279,6 +279,7 @@ function Classes.game:update(dt)
 
 	if enemies == 0 and allies > 0 then
 		SwitchState(Classes.menu())
+		love.filesystem.write(tostring(self.level.path), "true")
 	elseif enemies == 0 and allies == 0 then
 		SwitchState(Classes.menu())
 	elseif enemies > 0 and allies == 0 then

@@ -1,6 +1,7 @@
 require("src.load.load")
 require("src.game.game")
 require("src.menu.menu")
+require("src.menu.start")
 
 ---@class State
 ---@field switch fun(State)
@@ -17,7 +18,8 @@ function SwitchState(s)
 	state:switch()
 end
 
-SwitchState(Classes.game(2, false))
+-- SwitchState(Classes.game(2, false))
+SwitchState(Classes.start())
 
 local canvas = love.graphics.newCanvas(Globals.width, Globals.height)
 
@@ -41,6 +43,12 @@ function love.update(dt)
 	state:update(dt)
 end
 
+local muted = false
 function love.keypressed(key)
 	state:keypressed(key)
+
+	if key == "m" then
+		muted = not muted
+		SetMusicVolume(muted and 0 or 1)
+	end
 end

@@ -1,7 +1,7 @@
 ---@class GrenadeEntity : BulletEntity
 local class = require("src.game.entities.bullet"):extend()
 
-class.bounciness = 0.9
+class.bounciness = 0.8
 class.range = 10
 class.power = 1
 

@@ -2,13 +2,15 @@
 Classes.level = Clazz()
 
 Classes.level.width = 160
-Classes.level.height = 120
+Classes.level.height = 123
 
 
 ---Initializes a new game
 ---@param level number
 function Classes.level:init(level)
 	local image = love.image.newImageData("data/levels/" .. level .. ".png")
+
+	self.path = level
 
 	self.spawns = {
 		sa = {},
